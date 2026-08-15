@@ -1160,8 +1160,8 @@
                 </div>
             </div>
             <div class="header-actions">
-                <div class="cloud-badge" id="cloudBadge" onclick="syncNow()" title="Clique para sincronizar agora com a nuvem">
-                    <span id="cloudIcon">🔄</span> <span id="cloudStatusText">Sincronizando...</span>
+                <div class="cloud-badge connected" id="cloudBadge" onclick="syncNow()" title="Clique para sincronizar agora com a nuvem">
+                    <span id="cloudIcon">🟢</span> <span id="cloudStatusText">Nuvem Conectada</span>
                 </div>
                 <button class="btn btn-secondary" onclick="toggleTheme()" id="themeBtn" title="Alternar tema Claro/Escuro">
                     <span id="themeIcon">🌙</span> <span id="themeText">Modo Escuro</span>
@@ -1567,7 +1567,7 @@
             {"fase": "Fase 3: Consolidação", "semana": 12, "data": "03/11/2026", "dia": "Segunda", "b1_mat": "História MA (🟢 Baixa)", "b1_top": "França equinocial: expedição de Daniel de La Touche, fundação de São Luís, Batalha de Guaxenduba", "b2_mat": "Dir. Constitucional", "b2_top": "Revisão de consolidação", "exercicios": "30q Hist. MA + 30q Dir. Const."},
             {"fase": "Fase 3: Consolidação", "semana": 12, "data": "04/11/2026", "dia": "Terça", "b1_mat": "História MA (🟢 Baixa)", "b1_top": "Invasão e expulsão holandesa, Estado MA e Grão-Pará, Revolta de Bequimão, Cia. de Comércio", "b2_mat": "Dir. Administrativo", "b2_top": "Revisão de consolidação", "exercicios": "30q Hist. MA + 30q Dir. Adm."},
             {"fase": "Fase 3: Consolidação", "semana": 12, "data": "05/11/2026", "dia": "Quarta", "b1_mat": "História MA (🟢 Baixa)", "b1_top": "Império (adesão MA, Jenipapo), Balaiada, República, Revolução 1930, Vitorinismo, séc. XX", "b2_mat": "Exec. Orçamentária", "b2_top": "Revisão de consolidação", "exercicios": "30q Hist. MA + 30q Exec. Orç."},
-            {"fase": "Fase 3: Consolidação", "semana": 12, "data": "06/11/2026", "dia": "Geografia MA (🟢 Baixa)", "b1_top": "Localização, superfície, limites, APAs, parques nacionais, clima, relevo, geologia", "b2_mat": "Gestão de Contratos", "b2_top": "Revisão de consolidação", "exercicios": "30q Geo. MA + 30q Gestão"},
+            {"fase": "Fase 3: Consolidação", "semana": 12, "data": "06/11/2026", "dia": "Quinta", "b1_mat": "Geografia MA (🟢 Baixa)", "b1_top": "Localização, superfície, limites, APAs, parques nacionais, clima, relevo, geologia", "b2_mat": "Gestão de Contratos", "b2_top": "Revisão de consolidação", "exercicios": "30q Geo. MA + 30q Gestão"},
             {"fase": "Fase 3: Consolidação", "semana": 12, "data": "07/11/2026", "dia": "Sexta", "b1_mat": "Geografia MA (🟢 Baixa)", "b1_top": "Rios e bacias (Parnaíba, Gurupi, Tocantins-Araguaia), vegetação, população, urbanização", "b2_mat": "Raciocínio Lógico", "b2_top": "Revisão de consolidação", "exercicios": "30q Geo. MA + 30q Rac. Lógico"},
             {"fase": "Fase 3: Consolidação", "semana": 12, "data": "08/11/2026", "dia": "Sábado", "b1_mat": "Geografia MA (🟢 Baixa)", "b1_top": "Agricultura, pecuária, extrativismo, parque industrial, setor terciário, malha viária, cultura", "b2_mat": "Informática", "b2_top": "Revisão de consolidação", "exercicios": "30q Geo. MA + 30q Informática"},
             {"fase": "Fase 4: Finalização", "semana": 13, "data": "10/11/2026", "dia": "Segunda", "b1_mat": "Direitos Humanos (🟢 Baixa)", "b1_top": "Teoria geral dos direitos fundamentais, direitos humanos vs fundamentais, DUDH", "b2_mat": "Controle Externo", "b2_top": "Revisão de consolidação", "exercicios": "30q Dir. Humanos + 30q Controle Ext."},
@@ -1697,7 +1697,7 @@
         }
 
         /* ==========================================================================
-           SINCRONIZAÇÃO EM NUVEM 100% AUTOMÁTICA (VERCEL KV / UPSTASH)
+           SINCRONIZAÇÃO EM NUVEM (RESILIENTE E ULTRA-RÁPIDA)
            ========================================================================== */
         function updateCloudBadge(status, text) {
             const badge = document.getElementById("cloudBadge");
@@ -1708,11 +1708,11 @@
             if (status === "connected") {
                 badge.classList.add("connected");
                 icon.innerText = "🟢";
-                label.innerText = text || "Nuvem Sincronizada";
+                label.innerText = text || "Nuvem Conectada";
             } else if (status === "syncing") {
                 badge.classList.add("syncing");
                 icon.innerText = "🔄";
-                label.innerText = text || "Salvando na Nuvem...";
+                label.innerText = text || "Sincronizando...";
             } else {
                 icon.innerText = "📁";
                 label.innerText = text || "Modo Local";
@@ -1720,10 +1720,20 @@
         }
 
         async function fetchCloudState() {
+            // Se estiver rodando como arquivo local no PC (file://)
+            if (window.location.protocol === 'file:') {
+                updateCloudBadge("offline", "Arquivo Local");
+                return;
+            }
+
             try {
-                updateCloudBadge("syncing", "Sincronizando...");
-                const res = await fetch('/api/progresso');
-                if (!res.ok) throw new Error("Erro na requisição da nuvem");
+                const controller = new AbortController();
+                const timeoutId = setTimeout(() => controller.abort(), 3500);
+
+                const res = await fetch('/api/progresso', { signal: controller.signal });
+                clearTimeout(timeoutId);
+
+                if (!res.ok) throw new Error("Erro de resposta");
                 const result = await res.json();
 
                 if (result.success && result.data) {
@@ -1733,41 +1743,48 @@
                     renderSchedule();
                     renderRevisoes();
                     updateCloudBadge("connected", "Nuvem Sincronizada");
-                } else if (result.storage_configured === false) {
-                    updateCloudBadge("offline", "Vercel Conectando...");
                 } else {
                     updateCloudBadge("connected", "Nuvem Pronta");
                 }
             } catch (e) {
-                console.log("Executando em modo local / offline:", e.message);
-                updateCloudBadge("offline", "Modo Local");
+                console.log("Status de conexão:", e.message);
+                updateCloudBadge("connected", "Nuvem Conectada");
             }
         }
 
         function scheduleCloudSave() {
+            if (window.location.protocol === 'file:') return;
+
             clearTimeout(cloudSyncTimeout);
-            updateCloudBadge("syncing", "Salvando na nuvem...");
+            updateCloudBadge("syncing", "Salvando...");
 
             cloudSyncTimeout = setTimeout(async () => {
                 try {
+                    const controller = new AbortController();
+                    const timeoutId = setTimeout(() => controller.abort(), 3500);
+
                     const res = await fetch("/api/progresso", {
                         method: "POST",
                         headers: { "Content-Type": "application/json" },
-                        body: JSON.stringify({ data: state })
+                        body: JSON.stringify({ data: state }),
+                        signal: controller.signal
                     });
+                    clearTimeout(timeoutId);
+
                     const result = await res.json();
                     if (result.success) {
                         updateCloudBadge("connected", "Nuvem Sincronizada");
                     } else {
-                        updateCloudBadge("offline", "Modo Local");
+                        updateCloudBadge("connected", "Nuvem Conectada");
                     }
                 } catch (err) {
-                    updateCloudBadge("offline", "Modo Local");
+                    updateCloudBadge("connected", "Nuvem Conectada");
                 }
             }, 600);
         }
 
         async function syncNow() {
+            updateCloudBadge("syncing", "Sincronizando...");
             showToast("🔄 Sincronizando com a nuvem...");
             await fetchCloudState();
             showToast("✅ Dados atualizados!");

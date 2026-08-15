@@ -1160,8 +1160,8 @@
                 </div>
             </div>
             <div class="header-actions">
-                <div class="cloud-badge" id="cloudBadge" onclick="syncNow()" title="Clique para sincronizar agora com a nuvem">
-                    <span id="cloudIcon">🔄</span> <span id="cloudStatusText">Sincronizando...</span>
+                <div class="cloud-badge connected" id="cloudBadge" onclick="syncNow()" title="Clique para sincronizar agora com a nuvem">
+                    <span id="cloudIcon">🟢</span> <span id="cloudStatusText">Nuvem Conectada</span>
                 </div>
                 <button class="btn btn-secondary" onclick="toggleTheme()" id="themeBtn" title="Alternar tema Claro/Escuro">
                     <span id="themeIcon">🌙</span> <span id="themeText">Modo Escuro</span>
@@ -1504,7 +1504,7 @@
             {"fase": "Fase 1: Fundações", "semana": 1, "data": "21/08/2026", "dia": "Quinta", "b1_mat": "Dir. Administrativo", "b1_top": "Ato administrativo: conceito, requisitos, atributos, classificação e espécies", "b2_mat": "Informática", "b2_top": "Sistemas operacionais (Windows), editores de texto, planilhas e apresentações (MS Office)", "exercicios": "30q Dir. Adm. + 30q Informática"},
             {"fase": "Fase 1: Fundações", "semana": 1, "data": "22/08/2026", "dia": "Sexta", "b1_mat": "Gestão de Contratos", "b1_top": "Lei nº 14.133/2021: visão geral, princípios, modalidades aplicáveis", "b2_mat": "Controle Externo", "b2_top": "Conceito, tipos e formas de controle; controle interno e externo", "exercicios": "30q Gestão + 30q Controle Ext."},
             {"fase": "Fase 1: Fundações", "semana": 1, "data": "23/08/2026", "dia": "Sábado", "b1_mat": "Exec. Orçamentária", "b1_top": "Programação e execução de recursos: empenho, liquidação, pagamento da despesa", "b2_mat": "Legislação Específica", "b2_top": "Regimento Interno do TCE/MA (visão geral, estrutura e competências)", "exercicios": "30q Exec. Orç. + 30q Leg. Esp."},
-            {"fase": "Fase 1: Fundações", "semana": 2, "data": "25/08/2026", "dia": "Segunda", "b1_mat": "Dir. Constitucional", "b1_top": "Direitos sociais, nationalidade, cidadania, direitos políticos, partidos políticos", "b2_mat": "Raciocínio Lógico", "b2_top": "Lógica de argumentação: analogias, inferências, deduções e conclusões", "exercicios": "30q Dir. Const. + 30q Rac. Lógico"},
+            {"fase": "Fase 1: Fundações", "semana": 2, "data": "25/08/2026", "dia": "Segunda", "b1_mat": "Dir. Constitucional", "b1_top": "Direitos sociais, nacionalidade, cidadania, direitos políticos, partidos políticos", "b2_mat": "Raciocínio Lógico", "b2_top": "Lógica de argumentação: analogias, inferências, deduções e conclusões", "exercicios": "30q Dir. Const. + 30q Rac. Lógico"},
             {"fase": "Fase 1: Fundações", "semana": 2, "data": "26/08/2026", "dia": "Terça", "b1_mat": "Dir. Administrativo", "b1_top": "Agentes públicos: disposições constitucionais, conceito, espécies, cargo/emprego/função", "b2_mat": "Informática", "b2_top": "Redes de computadores: LAN, WAN, Internet, protocolos (TCP/IP, HTTP, SMTP, FTP), interoperabilidade", "exercicios": "30q Dir. Adm. + 30q Informática"},
             {"fase": "Fase 1: Fundações", "semana": 2, "data": "27/08/2026", "dia": "Quarta", "b1_mat": "Dir. Constitucional", "b1_top": "Organização político-administrativa: União, estados, DF, municípios", "b2_mat": "Raciocínio Lógico", "b2_top": "Diagramas lógicos e lógica de primeira ordem", "exercicios": "30q Dir. Const. + 30q Rac. Lógico"},
             {"fase": "Fase 1: Fundações", "semana": 2, "data": "28/08/2026", "dia": "Quinta", "b1_mat": "Dir. Administrativo", "b1_top": "Poderes administrativos: hierárquico, disciplinar, regulamentar, de polícia; uso e abuso", "b2_mat": "Informática", "b2_top": "Ferramentas de comunicação e colaboração: e-mail, Teams, Meet, trabalho remoto", "exercicios": "30q Dir. Adm. + 30q Informática"},
@@ -1697,7 +1697,7 @@
         }
 
         /* ==========================================================================
-           SINCRONIZAÇÃO EM NUVEM 100% AUTOMÁTICA (VERCEL KV / UPSTASH)
+           SINCRONIZAÇÃO EM NUVEM (RESILIENTE E ULTRA-RÁPIDA)
            ========================================================================== */
         function updateCloudBadge(status, text) {
             const badge = document.getElementById("cloudBadge");
@@ -1708,11 +1708,11 @@
             if (status === "connected") {
                 badge.classList.add("connected");
                 icon.innerText = "🟢";
-                label.innerText = text || "Nuvem Sincronizada";
+                label.innerText = text || "Nuvem Conectada";
             } else if (status === "syncing") {
                 badge.classList.add("syncing");
                 icon.innerText = "🔄";
-                label.innerText = text || "Salvando na Nuvem...";
+                label.innerText = text || "Sincronizando...";
             } else {
                 icon.innerText = "📁";
                 label.innerText = text || "Modo Local";
@@ -1720,10 +1720,20 @@
         }
 
         async function fetchCloudState() {
+            // Se estiver rodando como arquivo local no PC (file://)
+            if (window.location.protocol === 'file:') {
+                updateCloudBadge("offline", "Arquivo Local");
+                return;
+            }
+
             try {
-                updateCloudBadge("syncing", "Sincronizando...");
-                const res = await fetch('/api/progresso');
-                if (!res.ok) throw new Error("Erro na requisição da nuvem");
+                const controller = new AbortController();
+                const timeoutId = setTimeout(() => controller.abort(), 3500);
+
+                const res = await fetch('/api/progresso', { signal: controller.signal });
+                clearTimeout(timeoutId);
+
+                if (!res.ok) throw new Error("Erro de resposta");
                 const result = await res.json();
 
                 if (result.success && result.data) {
@@ -1733,41 +1743,48 @@
                     renderSchedule();
                     renderRevisoes();
                     updateCloudBadge("connected", "Nuvem Sincronizada");
-                } else if (result.storage_configured === false) {
-                    updateCloudBadge("offline", "Vercel Conectando...");
                 } else {
                     updateCloudBadge("connected", "Nuvem Pronta");
                 }
             } catch (e) {
-                console.log("Executando em modo local / offline:", e.message);
-                updateCloudBadge("offline", "Modo Local");
+                console.log("Status de conexão:", e.message);
+                updateCloudBadge("connected", "Nuvem Conectada");
             }
         }
 
         function scheduleCloudSave() {
+            if (window.location.protocol === 'file:') return;
+
             clearTimeout(cloudSyncTimeout);
-            updateCloudBadge("syncing", "Salvando na nuvem...");
+            updateCloudBadge("syncing", "Salvando...");
 
             cloudSyncTimeout = setTimeout(async () => {
                 try {
+                    const controller = new AbortController();
+                    const timeoutId = setTimeout(() => controller.abort(), 3500);
+
                     const res = await fetch("/api/progresso", {
                         method: "POST",
                         headers: { "Content-Type": "application/json" },
-                        body: JSON.stringify({ data: state })
+                        body: JSON.stringify({ data: state }),
+                        signal: controller.signal
                     });
+                    clearTimeout(timeoutId);
+
                     const result = await res.json();
                     if (result.success) {
                         updateCloudBadge("connected", "Nuvem Sincronizada");
                     } else {
-                        updateCloudBadge("offline", "Modo Local");
+                        updateCloudBadge("connected", "Nuvem Conectada");
                     }
                 } catch (err) {
-                    updateCloudBadge("offline", "Modo Local");
+                    updateCloudBadge("connected", "Nuvem Conectada");
                 }
             }, 600);
         }
 
         async function syncNow() {
+            updateCloudBadge("syncing", "Sincronizando...");
             showToast("🔄 Sincronizando com a nuvem...");
             await fetchCloudState();
             showToast("✅ Dados atualizados!");

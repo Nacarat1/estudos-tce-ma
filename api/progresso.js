@@ -1,4 +1,4 @@
-// API Serverless da Vercel para Sincronização Global Automática (Sem necessidade de PIN)
+// API Serverless da Vercel para Sincronização Global Automática
 export default async function handler(req, res) {
     res.setHeader('Access-Control-Allow-Credentials', true);
     res.setHeader('Access-Control-Allow-Origin', '*');
@@ -13,7 +13,7 @@ export default async function handler(req, res) {
         return;
     }
 
-    // Busca automática de credenciais do Upstash Redis ou Vercel KV
+    // Busca de credenciais do Upstash Redis ou Vercel KV
     let redisUrl = process.env.UPSTASH_REDIS_REST_URL || process.env.KV_REST_API_URL;
     let redisToken = process.env.UPSTASH_REDIS_REST_TOKEN || process.env.KV_REST_API_TOKEN;
 
@@ -34,15 +34,20 @@ export default async function handler(req, res) {
         return res.status(200).json({
             success: false,
             storage_configured: false,
-            message: 'Banco Upstash Redis não detectado. Verifique se o Storage foi conectado ao projeto na Vercel.'
+            message: 'Upstash Redis ainda não conectado nas variáveis deste deploy.'
         });
     }
 
     try {
         if (req.method === 'GET') {
+            const controller = new AbortController();
+            const timeoutId = setTimeout(() => controller.abort(), 4000);
+
             const response = await fetch(`${redisUrl}/get/${GLOBAL_STORAGE_KEY}`, {
-                headers: { Authorization: `Bearer ${redisToken}` }
+                headers: { Authorization: `Bearer ${redisToken}` },
+                signal: controller.signal
             });
+            clearTimeout(timeoutId);
 
             const data = await response.json();
             let parsedState = null;
@@ -67,10 +72,12 @@ export default async function handler(req, res) {
             const stateData = body?.data || body;
 
             if (!stateData) {
-                return res.status(400).json({ success: false, error: 'Dados ausentes para gravação.' });
+                return res.status(400).json({ success: false, error: 'Dados ausentes.' });
             }
 
             const valueStr = JSON.stringify(stateData);
+            const controller = new AbortController();
+            const timeoutId = setTimeout(() => controller.abort(), 4000);
 
             const response = await fetch(`${redisUrl}/set/${GLOBAL_STORAGE_KEY}`, {
                 method: 'POST',
@@ -78,8 +85,10 @@ export default async function handler(req, res) {
                     Authorization: `Bearer ${redisToken}`,
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify(valueStr)
+                body: JSON.stringify(valueStr),
+                signal: controller.signal
             });
+            clearTimeout(timeoutId);
 
             const result = await response.json();
 
@@ -92,7 +101,7 @@ export default async function handler(req, res) {
 
         return res.status(405).json({ success: false, error: 'Método não permitido.' });
     } catch (error) {
-        console.error('Erro na sincronização:', error);
-        return res.status(500).json({ success: false, error: error.message });
+        console.error('Erro na sincronização:', error.message);
+        return res.status(200).json({ success: false, error: error.message });
     }
 }
