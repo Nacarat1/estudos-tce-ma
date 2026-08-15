@@ -324,19 +324,20 @@
         }
 
         .cloud-badge {
-            font-size: 0.78rem;
+            font-size: 0.82rem;
             font-weight: 700;
-            padding: 6px 12px;
+            padding: 7px 14px;
             border-radius: var(--r-chip);
             display: inline-flex;
             align-items: center;
-            gap: 6px;
+            gap: 8px;
             cursor: pointer;
-            transition: all 0.15s ease;
+            transition: all 0.2s ease;
             user-select: none;
             border: 1px solid var(--c-border);
             background: var(--c-surface);
-            color: var(--c-text-muted);
+            color: var(--c-text);
+            box-shadow: var(--shadow-subtle);
         }
 
         .cloud-badge.connected {
@@ -353,6 +354,7 @@
 
         .cloud-badge:hover {
             border-color: var(--c-brand);
+            transform: translateY(-1px);
         }
 
         /* ==========================================================================
@@ -592,7 +594,7 @@
             transition: border-color 0.15s ease, box-shadow 0.15s ease;
         }
 
-        select:focus, input[type="text"]:focus, input[type="number"]:focus, input[type="password"]:focus {
+        select:focus, input[type="text"]:focus, input[type="number"]:focus {
             border-color: var(--c-brand);
             box-shadow: 0 0 0 3px var(--c-brand-light);
             background: var(--c-surface);
@@ -1058,7 +1060,7 @@
         }
 
         /* ==========================================================================
-           MODAL DE CONFIRMAÇÃO & NUVEM
+           MODAL DE RESET
            ========================================================================== */
         .modal-overlay {
             position: fixed;
@@ -1087,7 +1089,7 @@
             border: 1px solid var(--c-border);
             border-radius: var(--r-card);
             padding: 24px;
-            max-width: 460px;
+            max-width: 440px;
             width: 90%;
             box-shadow: var(--shadow-float);
             transform: scale(0.95);
@@ -1109,7 +1111,7 @@
         .modal-card p {
             font-size: 0.88rem;
             color: var(--c-text-muted);
-            margin-bottom: 18px;
+            margin-bottom: 20px;
             line-height: 1.45;
         }
 
@@ -1117,7 +1119,6 @@
             display: flex;
             justify-content: flex-end;
             gap: 10px;
-            margin-top: 20px;
         }
 
         /* ==========================================================================
@@ -1159,8 +1160,8 @@
                 </div>
             </div>
             <div class="header-actions">
-                <div class="cloud-badge" id="cloudBadge" onclick="openCloudModal()" title="Configurar ou sincronizar na nuvem">
-                    <span id="cloudIcon">☁️</span> <span id="cloudStatusText">Modo Nuvem</span>
+                <div class="cloud-badge" id="cloudBadge" onclick="syncNow()" title="Clique para sincronizar agora com a nuvem">
+                    <span id="cloudIcon">🔄</span> <span id="cloudStatusText">Sincronizando...</span>
                 </div>
                 <button class="btn btn-secondary" onclick="toggleTheme()" id="themeBtn" title="Alternar tema Claro/Escuro">
                     <span id="themeIcon">🌙</span> <span id="themeText">Modo Escuro</span>
@@ -1477,25 +1478,6 @@
 
     </div>
 
-    <!-- MODAL DE NUVEM & PIN -->
-    <div class="modal-overlay" id="cloudModal">
-        <div class="modal-card">
-            <h3>☁️ Sincronização na Nuvem (Vercel KV)</h3>
-            <p>Digite uma senha pessoal (PIN ou palavra-chave) para sincronizar seu progresso em qualquer aparelho (celular, tablet e computadores).</p>
-            <div style="display: flex; flex-direction: column; gap: 8px; margin-bottom: 14px;">
-                <label style="font-size: 0.8rem; font-weight: 700; color: var(--c-text-muted);">Seu PIN / Chave Pessoal:</label>
-                <input type="text" id="cloudPinInput" placeholder="Ex: meu-pin-1234" style="width: 100%; font-size: 1rem; font-weight: 600; padding: 10px 14px;">
-            </div>
-            <p style="font-size: 0.78rem; color: var(--c-text-muted); line-height: 1.4;">
-                🔒 Seus dados são salvos no seu banco de dados seguro da Vercel. O mesmo PIN usado aqui deve ser colocado nos seus outros dispositivos.
-            </p>
-            <div class="modal-actions">
-                <button class="btn btn-secondary" onclick="closeCloudModal()">Fechar</button>
-                <button class="btn btn-primary" onclick="saveCloudPinAndSync()">Salvar e Sincronizar</button>
-            </div>
-        </div>
-    </div>
-
     <!-- MODAL DE RESET -->
     <div class="modal-overlay" id="resetModal">
         <div class="modal-card">
@@ -1585,7 +1567,7 @@
             {"fase": "Fase 3: Consolidação", "semana": 12, "data": "03/11/2026", "dia": "Segunda", "b1_mat": "História MA (🟢 Baixa)", "b1_top": "França equinocial: expedição de Daniel de La Touche, fundação de São Luís, Batalha de Guaxenduba", "b2_mat": "Dir. Constitucional", "b2_top": "Revisão de consolidação", "exercicios": "30q Hist. MA + 30q Dir. Const."},
             {"fase": "Fase 3: Consolidação", "semana": 12, "data": "04/11/2026", "dia": "Terça", "b1_mat": "História MA (🟢 Baixa)", "b1_top": "Invasão e expulsão holandesa, Estado MA e Grão-Pará, Revolta de Bequimão, Cia. de Comércio", "b2_mat": "Dir. Administrativo", "b2_top": "Revisão de consolidação", "exercicios": "30q Hist. MA + 30q Dir. Adm."},
             {"fase": "Fase 3: Consolidação", "semana": 12, "data": "05/11/2026", "dia": "Quarta", "b1_mat": "História MA (🟢 Baixa)", "b1_top": "Império (adesão MA, Jenipapo), Balaiada, República, Revolução 1930, Vitorinismo, séc. XX", "b2_mat": "Exec. Orçamentária", "b2_top": "Revisão de consolidação", "exercicios": "30q Hist. MA + 30q Exec. Orç."},
-            {"fase": "Fase 3: Consolidação", "semana": 12, "data": "06/11/2026", "dia": "Quinta", "b1_mat": "Geografia MA (🟢 Baixa)", "b1_top": "Localização, superfície, limites, APAs, parques nacionais, clima, relevo, geologia", "b2_mat": "Gestão de Contratos", "b2_top": "Revisão de consolidação", "exercicios": "30q Geo. MA + 30q Gestão"},
+            {"fase": "Fase 3: Consolidação", "semana": 12, "data": "06/11/2026", "dia": "Geografia MA (🟢 Baixa)", "b1_top": "Localização, superfície, limites, APAs, parques nacionais, clima, relevo, geologia", "b2_mat": "Gestão de Contratos", "b2_top": "Revisão de consolidação", "exercicios": "30q Geo. MA + 30q Gestão"},
             {"fase": "Fase 3: Consolidação", "semana": 12, "data": "07/11/2026", "dia": "Sexta", "b1_mat": "Geografia MA (🟢 Baixa)", "b1_top": "Rios e bacias (Parnaíba, Gurupi, Tocantins-Araguaia), vegetação, população, urbanização", "b2_mat": "Raciocínio Lógico", "b2_top": "Revisão de consolidação", "exercicios": "30q Geo. MA + 30q Rac. Lógico"},
             {"fase": "Fase 3: Consolidação", "semana": 12, "data": "08/11/2026", "dia": "Sábado", "b1_mat": "Geografia MA (🟢 Baixa)", "b1_top": "Agricultura, pecuária, extrativismo, parque industrial, setor terciário, malha viária, cultura", "b2_mat": "Informática", "b2_top": "Revisão de consolidação", "exercicios": "30q Geo. MA + 30q Informática"},
             {"fase": "Fase 4: Finalização", "semana": 13, "data": "10/11/2026", "dia": "Segunda", "b1_mat": "Direitos Humanos (🟢 Baixa)", "b1_top": "Teoria geral dos direitos fundamentais, direitos humanos vs fundamentais, DUDH", "b2_mat": "Controle Externo", "b2_top": "Revisão de consolidação", "exercicios": "30q Dir. Humanos + 30q Controle Ext."},
@@ -1677,7 +1659,6 @@
 
         const STORAGE_KEY = "TCE_MA_STUDY_TRACKER_V1";
         const THEME_KEY = "TCE_MA_THEME_V1";
-        const CLOUD_PIN_KEY = "TCE_MA_CLOUD_PIN_V1";
 
         let state = {
             days: {},
@@ -1716,12 +1697,8 @@
         }
 
         /* ==========================================================================
-           SINCRONIZAÇÃO EM NUVEM (VERCEL KV + FALLBACK LOCALSTORAGE)
+           SINCRONIZAÇÃO EM NUVEM 100% AUTOMÁTICA (VERCEL KV / UPSTASH)
            ========================================================================== */
-        function getCloudPin() {
-            return localStorage.getItem(CLOUD_PIN_KEY) || "";
-        }
-
         function updateCloudBadge(status, text) {
             const badge = document.getElementById("cloudBadge");
             const icon = document.getElementById("cloudIcon");
@@ -1735,24 +1712,18 @@
             } else if (status === "syncing") {
                 badge.classList.add("syncing");
                 icon.innerText = "🔄";
-                label.innerText = text || "Sincronizando...";
+                label.innerText = text || "Salvando na Nuvem...";
             } else {
-                icon.innerText = "☁️";
-                label.innerText = text || "Conectar Nuvem";
+                icon.innerText = "📁";
+                label.innerText = text || "Modo Local";
             }
         }
 
         async function fetchCloudState() {
-            const pin = getCloudPin();
-            if (!pin) {
-                updateCloudBadge("offline", "Conectar Nuvem");
-                return;
-            }
-
             try {
-                updateCloudBadge("syncing", "Buscando nuvem...");
-                const res = await fetch(`/api/progresso?pin=${encodeURIComponent(pin)}`);
-                if (!res.ok) throw new Error("Erro de rede");
+                updateCloudBadge("syncing", "Sincronizando...");
+                const res = await fetch('/api/progresso');
+                if (!res.ok) throw new Error("Erro na requisição da nuvem");
                 const result = await res.json();
 
                 if (result.success && result.data) {
@@ -1761,10 +1732,9 @@
                     updateMetrics();
                     renderSchedule();
                     renderRevisoes();
-                    updateCloudBadge("connected", "Nuvem Conectada");
-                    showToast("☁️ Dados carregados da nuvem Vercel!");
-                } else if (result.kv_configured === false) {
-                    updateCloudBadge("offline", "Vercel KV Pendente");
+                    updateCloudBadge("connected", "Nuvem Sincronizada");
+                } else if (result.storage_configured === false) {
+                    updateCloudBadge("offline", "Vercel Conectando...");
                 } else {
                     updateCloudBadge("connected", "Nuvem Pronta");
                 }
@@ -1775,9 +1745,6 @@
         }
 
         function scheduleCloudSave() {
-            const pin = getCloudPin();
-            if (!pin) return;
-
             clearTimeout(cloudSyncTimeout);
             updateCloudBadge("syncing", "Salvando na nuvem...");
 
@@ -1786,41 +1753,24 @@
                     const res = await fetch("/api/progresso", {
                         method: "POST",
                         headers: { "Content-Type": "application/json" },
-                        body: JSON.stringify({ pin, data: state })
+                        body: JSON.stringify({ data: state })
                     });
                     const result = await res.json();
                     if (result.success) {
-                        updateCloudBadge("connected", "Nuvem Atualizada");
+                        updateCloudBadge("connected", "Nuvem Sincronizada");
                     } else {
                         updateCloudBadge("offline", "Modo Local");
                     }
                 } catch (err) {
                     updateCloudBadge("offline", "Modo Local");
                 }
-            }, 800);
+            }, 600);
         }
 
-        function openCloudModal() {
-            const pin = getCloudPin();
-            document.getElementById("cloudPinInput").value = pin;
-            document.getElementById("cloudModal").classList.add("show");
-        }
-
-        function closeCloudModal() {
-            document.getElementById("cloudModal").classList.remove("show");
-        }
-
-        async function saveCloudPinAndSync() {
-            const pinVal = document.getElementById("cloudPinInput").value.trim();
-            if (!pinVal) {
-                alert("Por favor, digite um PIN ou chave pessoal (ex: meu-pin-1234).");
-                return;
-            }
-            localStorage.setItem(CLOUD_PIN_KEY, pinVal);
-            closeCloudModal();
-            showToast("☁️ PIN da nuvem salvo!");
+        async function syncNow() {
+            showToast("🔄 Sincronizando com a nuvem...");
             await fetchCloudState();
-            scheduleCloudSave();
+            showToast("✅ Dados atualizados!");
         }
 
         /* ==========================================================================
@@ -2196,14 +2146,26 @@
         }
 
         /* ==========================================================================
-           INICIALIZAÇÃO DA APLICAÇÃO
+           INICIALIZAÇÃO & LISTENERS AUTOMÁTICOS DE SINCRONIZAÇÃO
            ========================================================================== */
         initTheme();
         loadState();
         updateMetrics();
         renderSchedule();
         renderRevisoes();
+
+        // Carrega da nuvem ao abrir
         fetchCloudState();
+
+        // Recarrega da nuvem automaticamente ao alternar abas ou desbloquear tela do celular
+        document.addEventListener("visibilitychange", () => {
+            if (document.visibilityState === "visible") {
+                fetchCloudState();
+            }
+        });
+        window.addEventListener("focus", () => {
+            fetchCloudState();
+        });
     </script>
 </body>
 </html>
