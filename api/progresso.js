@@ -1,6 +1,5 @@
-// API Serverless da Vercel para persistência de progresso no Vercel KV
+// API Serverless da Vercel compatível com Upstash (Redis), Vercel KV e Vercel Blob
 export default async function handler(req, res) {
-    // Configuração de CORS para permitir requisições seguras
     res.setHeader('Access-Control-Allow-Credentials', true);
     res.setHeader('Access-Control-Allow-Origin', '*');
     res.setHeader('Access-Control-Allow-Methods', 'GET,OPTIONS,PATCH,DELETE,POST,PUT');
@@ -14,84 +13,133 @@ export default async function handler(req, res) {
         return;
     }
 
-    const kvUrl = process.env.KV_REST_API_URL;
-    const kvToken = process.env.KV_REST_API_TOKEN;
+    // Suporta Upstash Redis (Marketplace) ou Vercel KV
+    const redisUrl = process.env.UPSTASH_REDIS_REST_URL || process.env.KV_REST_API_URL;
+    const redisToken = process.env.UPSTASH_REDIS_REST_TOKEN || process.env.KV_REST_API_TOKEN;
 
-    // Se o Vercel KV ainda não foi criado no painel da Vercel
-    if (!kvUrl || !kvToken) {
+    // Se estiver usando Vercel Blob
+    const blobToken = process.env.BLOB_READ_WRITE_TOKEN;
+
+    // Se nenhuma storage foi conectada ainda
+    if (!redisUrl && !blobToken) {
         return res.status(200).json({
             success: false,
-            kv_configured: false,
-            message: 'Vercel KV ainda não conectado. Acesse o painel da Vercel > Storage > Create KV para ativar a sincronização na nuvem.'
+            storage_configured: false,
+            message: 'Nenhum Storage conectado na Vercel. Escolha Upstash (Redis) ou Blob no painel.'
         });
     }
 
     try {
-        if (req.method === 'GET') {
-            const { pin } = req.query;
-            const cleanPin = (pin || 'default').replace(/[^a-zA-Z0-9_-]/g, '');
-            const key = `tce_ma_progress_${cleanPin}`;
+        // ==========================================
+        // 1. SUPORTE A UPSTASH / REDIS (RECOMENDADO)
+        // ==========================================
+        if (redisUrl && redisToken) {
+            if (req.method === 'GET') {
+                const { pin } = req.query;
+                const cleanPin = (pin || 'default').replace(/[^a-zA-Z0-9_-]/g, '');
+                const key = `tce_ma_progress_${cleanPin}`;
 
-            const response = await fetch(`${kvUrl}/get/${key}`, {
-                headers: {
-                    Authorization: `Bearer ${kvToken}`
+                const response = await fetch(`${redisUrl}/get/${key}`, {
+                    headers: { Authorization: `Bearer ${redisToken}` }
+                });
+
+                const data = await response.json();
+                let parsedState = null;
+
+                if (data && data.result) {
+                    try {
+                        parsedState = typeof data.result === 'string' ? JSON.parse(data.result) : data.result;
+                    } catch (e) {
+                        parsedState = data.result;
+                    }
                 }
-            });
 
-            const data = await response.json();
-            let parsedState = null;
-
-            if (data && data.result) {
-                try {
-                    parsedState = typeof data.result === 'string' ? JSON.parse(data.result) : data.result;
-                } catch (e) {
-                    parsedState = data.result;
-                }
+                return res.status(200).json({
+                    success: true,
+                    storage_type: 'upstash_redis',
+                    data: parsedState,
+                    timestamp: new Date().toISOString()
+                });
             }
 
-            return res.status(200).json({
-                success: true,
-                kv_configured: true,
-                data: parsedState,
-                timestamp: new Date().toISOString()
-            });
+            if (req.method === 'POST') {
+                const body = typeof req.body === 'string' ? JSON.parse(req.body) : req.body;
+                const pin = body?.pin || 'default';
+                const stateData = body?.data;
+
+                if (!stateData) {
+                    return res.status(400).json({ success: false, error: 'Dados ausentes para gravação.' });
+                }
+
+                const cleanPin = pin.replace(/[^a-zA-Z0-9_-]/g, '');
+                const key = `tce_ma_progress_${cleanPin}`;
+                const valueStr = JSON.stringify(stateData);
+
+                const response = await fetch(`${redisUrl}/set/${key}`, {
+                    method: 'POST',
+                    headers: {
+                        Authorization: `Bearer ${redisToken}`,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(valueStr)
+                });
+
+                const result = await response.json();
+
+                return res.status(200).json({
+                    success: true,
+                    storage_type: 'upstash_redis',
+                    result,
+                    savedAt: new Date().toISOString()
+                });
+            }
         }
 
-        if (req.method === 'POST') {
-            const body = typeof req.body === 'string' ? JSON.parse(req.body) : req.body;
-            const pin = body?.pin || 'default';
-            const stateData = body?.data;
+        // ==========================================
+        // 2. SUPORTE A VERCEL BLOB
+        // ==========================================
+        if (blobToken) {
+            const { put, list } = await import('@vercel/blob');
+            const cleanPin = ((req.query?.pin || (typeof req.body === 'object' ? req.body?.pin : '')) || 'default').replace(/[^a-zA-Z0-9_-]/g, '');
+            const pathname = `progress_${cleanPin}.json`;
 
-            if (!stateData) {
-                return res.status(400).json({ success: false, error: 'Dados ausentes para gravação.' });
+            if (req.method === 'GET') {
+                const { blobs } = await list({ token: blobToken, prefix: pathname });
+                if (blobs.length > 0) {
+                    const latestBlob = blobs[0];
+                    const blobRes = await fetch(latestBlob.url);
+                    const parsedState = await blobRes.json();
+                    return res.status(200).json({
+                        success: true,
+                        storage_type: 'vercel_blob',
+                        data: parsedState,
+                        timestamp: new Date().toISOString()
+                    });
+                }
+                return res.status(200).json({ success: true, data: null });
             }
 
-            const cleanPin = pin.replace(/[^a-zA-Z0-9_-]/g, '');
-            const key = `tce_ma_progress_${cleanPin}`;
-            const valueStr = JSON.stringify(stateData);
+            if (req.method === 'POST') {
+                const body = typeof req.body === 'string' ? JSON.parse(req.body) : req.body;
+                const stateData = body?.data;
+                const blob = await put(pathname, JSON.stringify(stateData), {
+                    access: 'public',
+                    addRandomSuffix: false,
+                    token: blobToken
+                });
 
-            const response = await fetch(`${kvUrl}/set/${key}`, {
-                method: 'POST',
-                headers: {
-                    Authorization: `Bearer ${kvToken}`,
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(valueStr)
-            });
-
-            const result = await response.json();
-
-            return res.status(200).json({
-                success: true,
-                kv_configured: true,
-                result,
-                savedAt: new Date().toISOString()
-            });
+                return res.status(200).json({
+                    success: true,
+                    storage_type: 'vercel_blob',
+                    url: blob.url,
+                    savedAt: new Date().toISOString()
+                });
+            }
         }
 
         return res.status(405).json({ success: false, error: 'Método não permitido.' });
     } catch (error) {
-        console.error('Erro na API Vercel KV:', error);
+        console.error('Erro na API de Progresso:', error);
         return res.status(500).json({ success: false, error: error.message });
     }
 }
