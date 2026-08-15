@@ -1,0 +1,17 @@
+# Dependências
+node_modules/
+.vite/
+dist/
+
+# Arquivos temporários do Windows e Excel
+~$*
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# Logs
+*.log
+
+# IDEs
+.vscode/
+.idea/

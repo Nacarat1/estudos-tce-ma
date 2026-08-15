@@ -1,0 +1,2209 @@
+<!DOCTYPE html>
+<html lang="pt-BR" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Painel de Estudos TCE-MA | Técnico-Administrativa • Nacarat</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=Outfit:wght@400;500;600;700;800&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+    <style>
+        /* ==========================================================================
+           DESIGN SYSTEM NACARAT — TOKENS & VARIÁVEIS CSS
+           ========================================================================== */
+        :root {
+            /* Identidade do Produto (SaaS / Aplicação Web) */
+            --c-brand: #059669;
+            --c-brand-dark: #047857;
+            --c-brand-light: #D1FAE5;
+            --c-brand-subtle: #ECFDF5;
+            --c-brand-text: #064E3B;
+
+            /* Identidade Institucional Nacarat */
+            --brand-gold: #E8951A;
+            --brand-gold-hover: #C27A13;
+            --brand-gold-light: #FEF3C7;
+            --brand-gold-text: #92400E;
+            --navy-brand: #1E3B6A;
+            --navy-brand-dark: #152C52;
+            --navy-brand-subtle: #EFF6FF;
+
+            /* Superfícies e Neutros (Light Modern) */
+            --c-bg: #F7F7F5;
+            --c-surface: #FFFFFF;
+            --c-surface-2: #FAFAFA;
+            --c-surface-hover: #F3F4F6;
+            --c-border: #E5E4E2;
+            --c-border-soft: #F0EFEE;
+            --c-border-focus: #059669;
+
+            /* Tipografia e Contrastes de Texto */
+            --c-text: #1A1917;
+            --c-text-muted: #706E6B;
+            --c-text-faint: #A6A39F;
+
+            /* Cores Semânticas de Prioridade & Status */
+            --prio-high-bg: #FEE2E2;
+            --prio-high-text: #991B1B;
+            --prio-high-border: #FCA5A5;
+            --prio-high-dot: #DC2626;
+
+            --prio-med-bg: #FEF3C7;
+            --prio-med-text: #92400E;
+            --prio-med-border: #FCD34D;
+            --prio-med-dot: #D97706;
+
+            --prio-low-bg: #D1FAE5;
+            --prio-low-text: #064E3B;
+            --prio-low-border: #6EE7B7;
+            --prio-low-dot: #059669;
+
+            --status-done-bg: #ECFDF5;
+            --status-done-border: #A7F3D0;
+            --status-done-text: #047857;
+
+            /* Geometria e Raios de Arredondamento */
+            --r-card: 14px;
+            --r-btn: 10px;
+            --r-chip: 999px;
+            --r-input: 10px;
+
+            /* Elevação e Sombras */
+            --shadow-subtle: 0 1px 3px rgba(0, 0, 0, 0.05), 0 1px 2px rgba(0, 0, 0, 0.04);
+            --shadow-card: 0 2px 8px rgba(0, 0, 0, 0.06), 0 1px 3px rgba(0, 0, 0, 0.04);
+            --shadow-card-hover: 0 6px 18px rgba(0, 0, 0, 0.08), 0 2px 6px rgba(0, 0, 0, 0.04);
+            --shadow-float: 0 8px 24px rgba(0, 0, 0, 0.10), 0 2px 6px rgba(0, 0, 0, 0.06);
+
+            /* Gradientes de Acentuação */
+            --grad-brand: linear-gradient(135deg, #059669 0%, #047857 100%);
+            --grad-gold: linear-gradient(135deg, #E8951A 0%, #C27A13 100%);
+            --grad-navy: linear-gradient(135deg, #1E3B6A 0%, #152C52 100%);
+            --grad-card-header: linear-gradient(180deg, rgba(247, 247, 245, 0.7) 0%, rgba(255, 255, 255, 0) 100%);
+        }
+
+        /* Modo Escuro Sofisticado (Dark Mode) */
+        [data-theme="dark"] {
+            --c-bg: #0B0F19;
+            --c-surface: #151E33;
+            --c-surface-2: #1E293B;
+            --c-surface-hover: #263554;
+            --c-border: rgba(255, 255, 255, 0.10);
+            --c-border-soft: rgba(255, 255, 255, 0.06);
+            --c-border-focus: #10B981;
+
+            --c-text: #F8FAFC;
+            --c-text-muted: #94A3B8;
+            --c-text-faint: #64748B;
+
+            --c-brand: #10B981;
+            --c-brand-dark: #059669;
+            --c-brand-light: rgba(16, 185, 129, 0.18);
+            --c-brand-subtle: rgba(16, 185, 129, 0.08);
+            --c-brand-text: #6EE7B7;
+
+            --brand-gold: #F59E0B;
+            --brand-gold-light: rgba(245, 158, 11, 0.15);
+            --brand-gold-text: #FDE68A;
+
+            --navy-brand: #3B82F6;
+            --navy-brand-subtle: rgba(59, 130, 246, 0.12);
+
+            --prio-high-bg: rgba(239, 68, 68, 0.15);
+            --prio-high-text: #FCA5A5;
+            --prio-high-border: rgba(239, 68, 68, 0.3);
+            --prio-high-dot: #EF4444;
+
+            --prio-med-bg: rgba(245, 158, 11, 0.15);
+            --prio-med-text: #FDE68A;
+            --prio-med-border: rgba(245, 158, 11, 0.3);
+            --prio-med-dot: #F59E0B;
+
+            --prio-low-bg: rgba(16, 185, 129, 0.15);
+            --prio-low-text: #A7F3D0;
+            --prio-low-border: rgba(16, 185, 129, 0.3);
+            --prio-low-dot: #10B981;
+
+            --status-done-bg: rgba(16, 185, 129, 0.12);
+            --status-done-border: rgba(16, 185, 129, 0.25);
+            --status-done-text: #6EE7B7;
+
+            --shadow-subtle: 0 1px 3px rgba(0, 0, 0, 0.2);
+            --shadow-card: 0 4px 12px rgba(0, 0, 0, 0.25);
+            --shadow-card-hover: 0 8px 24px rgba(0, 0, 0, 0.35);
+            --shadow-float: 0 12px 32px rgba(0, 0, 0, 0.5);
+
+            --grad-card-header: linear-gradient(180deg, rgba(255, 255, 255, 0.03) 0%, rgba(255, 255, 255, 0) 100%);
+        }
+
+        /* ==========================================================================
+           RESET & REGRAS GERAIS
+           ========================================================================== */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'DM Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            background-color: var(--c-bg);
+            color: var(--c-text);
+            min-height: 100vh;
+            line-height: 1.5;
+            transition: background-color 0.25s ease, color 0.25s ease;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            padding-bottom: 60px;
+        }
+
+        /* ==========================================================================
+           CABEÇALHO INSTITUCIONAL NACARAT
+           ========================================================================== */
+        header {
+            background: var(--c-surface);
+            border-bottom: 1px solid var(--c-border);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: var(--shadow-subtle);
+            backdrop-filter: blur(12px);
+            transition: background-color 0.25s ease, border-color 0.25s ease;
+        }
+
+        .header-content {
+            max-width: 1440px;
+            margin: 0 auto;
+            padding: 14px 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 16px;
+        }
+
+        .brand-container {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+
+        .brand-badge-logo {
+            width: 44px;
+            height: 44px;
+            border-radius: 12px;
+            background: var(--grad-navy);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #FFFFFF;
+            font-family: 'Outfit', sans-serif;
+            font-weight: 800;
+            font-size: 1.25rem;
+            box-shadow: 0 4px 10px rgba(30, 59, 106, 0.25);
+            flex-shrink: 0;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .brand-badge-logo::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 14px;
+            height: 14px;
+            background: var(--brand-gold);
+            border-bottom-left-radius: 8px;
+        }
+
+        .brand-text h1 {
+            font-family: 'Outfit', sans-serif;
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--c-text);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            letter-spacing: -0.3px;
+        }
+
+        .brand-text .product-tag {
+            font-size: 0.72rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            padding: 2px 8px;
+            border-radius: var(--r-chip);
+            background: var(--c-brand-light);
+            color: var(--c-brand-text);
+            border: 1px solid var(--c-brand-subtle);
+        }
+
+        .brand-text p {
+            font-size: 0.82rem;
+            color: var(--c-text-muted);
+            margin-top: 1px;
+        }
+
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        /* ==========================================================================
+           SISTEMA DE BOTÕES (UI KIT NACARAT)
+           ========================================================================== */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 8px 16px;
+            border-radius: var(--r-btn);
+            font-family: 'DM Sans', sans-serif;
+            font-size: 0.85rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.15s ease-in-out;
+            text-decoration: none;
+            outline: none;
+            white-space: nowrap;
+            user-select: none;
+        }
+
+        .btn:active {
+            transform: scale(0.97);
+        }
+
+        .btn-primary {
+            background: var(--c-brand);
+            border: 1px solid var(--c-brand-dark);
+            color: #FFFFFF;
+            box-shadow: 0 2px 4px rgba(5, 150, 105, 0.2);
+        }
+
+        .btn-primary:hover {
+            background: var(--c-brand-dark);
+            box-shadow: 0 4px 10px rgba(5, 150, 105, 0.3);
+        }
+
+        .btn-secondary {
+            background: var(--c-surface);
+            border: 1px solid var(--c-border);
+            color: var(--c-text);
+            box-shadow: var(--shadow-subtle);
+        }
+
+        .btn-secondary:hover {
+            background: var(--c-surface-hover);
+            border-color: var(--c-text-faint);
+        }
+
+        .btn-ghost {
+            background: transparent;
+            border: 1px solid transparent;
+            color: var(--c-text-muted);
+        }
+
+        .btn-ghost:hover {
+            background: var(--c-surface-hover);
+            color: var(--c-text);
+        }
+
+        .btn-danger-ghost {
+            background: transparent;
+            border: 1px solid var(--c-border);
+            color: var(--prio-high-text);
+        }
+
+        .btn-danger-ghost:hover {
+            background: var(--prio-high-bg);
+            border-color: var(--prio-high-border);
+        }
+
+        .cloud-badge {
+            font-size: 0.78rem;
+            font-weight: 700;
+            padding: 6px 12px;
+            border-radius: var(--r-chip);
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            cursor: pointer;
+            transition: all 0.15s ease;
+            user-select: none;
+            border: 1px solid var(--c-border);
+            background: var(--c-surface);
+            color: var(--c-text-muted);
+        }
+
+        .cloud-badge.connected {
+            background: var(--c-brand-light);
+            border-color: var(--status-done-border);
+            color: var(--c-brand-text);
+        }
+
+        .cloud-badge.syncing {
+            background: var(--brand-gold-light);
+            border-color: var(--prio-med-border);
+            color: var(--brand-gold-text);
+        }
+
+        .cloud-badge:hover {
+            border-color: var(--c-brand);
+        }
+
+        /* ==========================================================================
+           CONTAINER PRINCIPAL
+           ========================================================================== */
+        .container {
+            max-width: 1440px;
+            margin: 24px auto;
+            padding: 0 24px;
+        }
+
+        /* ==========================================================================
+           CARDS DE MÉTRICAS & KPIs (TOP METRICS)
+           ========================================================================== */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+
+        .stat-card {
+            background: var(--c-surface);
+            border: 1px solid var(--c-border);
+            border-radius: var(--r-card);
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            box-shadow: var(--shadow-card);
+            position: relative;
+            overflow: hidden;
+            transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-card-hover);
+            border-color: var(--c-brand-light);
+        }
+
+        .stat-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: var(--c-border-soft);
+        }
+
+        .stat-card.stat-countdown::before { background: var(--grad-gold); }
+        .stat-card.stat-days::before { background: var(--grad-brand); }
+        .stat-card.stat-revs::before { background: var(--grad-navy); }
+        .stat-card.stat-questions::before { background: linear-gradient(90deg, #8B5CF6, #3B82F6); }
+
+        .stat-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 8px;
+        }
+
+        .stat-label {
+            font-size: 0.78rem;
+            text-transform: uppercase;
+            letter-spacing: 0.6px;
+            font-weight: 700;
+            color: var(--c-text-muted);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .stat-icon {
+            font-size: 1.1rem;
+        }
+
+        .stat-value {
+            font-family: 'Outfit', sans-serif;
+            font-size: 1.85rem;
+            font-weight: 700;
+            color: var(--c-text);
+            display: flex;
+            align-items: baseline;
+            gap: 6px;
+            line-height: 1.2;
+            margin-bottom: 6px;
+        }
+
+        .stat-value-sub {
+            font-size: 0.95rem;
+            font-weight: 500;
+            color: var(--c-text-muted);
+        }
+
+        .stat-sub {
+            font-size: 0.8rem;
+            color: var(--c-text-muted);
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .progress-bar-container {
+            width: 100%;
+            height: 7px;
+            background: var(--c-surface-2);
+            border: 1px solid var(--c-border-soft);
+            border-radius: var(--r-chip);
+            margin-top: 10px;
+            overflow: hidden;
+        }
+
+        .progress-bar-fill {
+            height: 100%;
+            background: var(--grad-brand);
+            border-radius: var(--r-chip);
+            transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        /* ==========================================================================
+           NAVEGAÇÃO POR ABAS (SEGMENTED PILL BAR)
+           ========================================================================== */
+        .tabs-nav-container {
+            background: var(--c-surface);
+            border: 1px solid var(--c-border);
+            border-radius: var(--r-card);
+            padding: 6px;
+            margin-bottom: 24px;
+            box-shadow: var(--shadow-subtle);
+            display: flex;
+            gap: 6px;
+            overflow-x: auto;
+        }
+
+        .tab-btn {
+            background: transparent;
+            border: 1px solid transparent;
+            color: var(--c-text-muted);
+            font-family: 'Outfit', sans-serif;
+            font-size: 0.95rem;
+            font-weight: 600;
+            padding: 10px 20px;
+            border-radius: var(--r-btn);
+            cursor: pointer;
+            transition: all 0.15s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            white-space: nowrap;
+            flex: 1;
+            justify-content: center;
+        }
+
+        .tab-btn:hover {
+            color: var(--c-text);
+            background: var(--c-surface-2);
+        }
+
+        .tab-btn.active {
+            color: var(--c-brand-text);
+            background: var(--c-brand-light);
+            border-color: var(--c-brand-subtle);
+            font-weight: 700;
+        }
+
+        [data-theme="dark"] .tab-btn.active {
+            color: #FFFFFF;
+            background: var(--c-surface-2);
+            border-color: var(--c-brand);
+        }
+
+        /* ==========================================================================
+           PAINÉIS DE CONTEÚDO (TAB PANES)
+           ========================================================================== */
+        .tab-pane {
+            display: none;
+        }
+
+        .tab-pane.active {
+            display: block;
+            animation: fadeIn 0.2s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(4px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* ==========================================================================
+           BARRA DE FILTROS E CONTROLES (FILTER BAR)
+           ========================================================================== */
+        .filter-bar {
+            background: var(--c-surface);
+            border: 1px solid var(--c-border);
+            border-radius: var(--r-card);
+            padding: 16px 20px;
+            margin-bottom: 24px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 16px;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: var(--shadow-subtle);
+        }
+
+        .filter-group {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .filter-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .filter-label {
+            font-size: 0.82rem;
+            font-weight: 600;
+            color: var(--c-text-muted);
+            white-space: nowrap;
+        }
+
+        select, input[type="text"], input[type="number"], input[type="password"] {
+            background: var(--c-surface-2);
+            border: 1px solid var(--c-border);
+            color: var(--c-text);
+            padding: 8px 14px;
+            border-radius: var(--r-input);
+            font-size: 0.85rem;
+            font-family: inherit;
+            outline: none;
+            transition: border-color 0.15s ease, box-shadow 0.15s ease;
+        }
+
+        select:focus, input[type="text"]:focus, input[type="number"]:focus, input[type="password"]:focus {
+            border-color: var(--c-brand);
+            box-shadow: 0 0 0 3px var(--c-brand-light);
+            background: var(--c-surface);
+        }
+
+        .search-box {
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
+
+        .search-box input {
+            padding-left: 34px;
+            min-width: 220px;
+        }
+
+        .search-box .search-icon {
+            position: absolute;
+            left: 12px;
+            font-size: 0.85rem;
+            color: var(--c-text-muted);
+            pointer-events: none;
+        }
+
+        /* ==========================================================================
+           CRONOGRAMA DIÁRIO (SCHEDULE CARDS)
+           ========================================================================== */
+        .schedule-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 18px;
+        }
+
+        .day-card {
+            background: var(--c-surface);
+            border: 1px solid var(--c-border);
+            border-radius: var(--r-card);
+            overflow: hidden;
+            box-shadow: var(--shadow-card);
+            transition: all 0.2s ease;
+        }
+
+        .day-card:hover {
+            box-shadow: var(--shadow-card-hover);
+        }
+
+        .day-card.completed {
+            border-color: var(--status-done-border);
+            background: var(--c-surface);
+        }
+
+        .day-header {
+            background: var(--grad-card-header);
+            border-bottom: 1px solid var(--c-border-soft);
+            padding: 14px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+
+        .day-meta {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .day-badge {
+            font-family: 'Outfit', sans-serif;
+            font-weight: 700;
+            font-size: 0.9rem;
+            background: var(--navy-brand-subtle);
+            border: 1px solid rgba(30, 59, 106, 0.15);
+            padding: 4px 12px;
+            border-radius: var(--r-chip);
+            color: var(--navy-brand);
+        }
+
+        [data-theme="dark"] .day-badge {
+            background: rgba(59, 130, 246, 0.15);
+            border-color: rgba(59, 130, 246, 0.3);
+            color: #93C5FD;
+        }
+
+        .day-date {
+            font-size: 0.85rem;
+            color: var(--c-text-muted);
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .day-phase {
+            font-size: 0.75rem;
+            font-weight: 600;
+            padding: 3px 10px;
+            border-radius: var(--r-chip);
+            background: var(--c-surface-2);
+            color: var(--c-text-muted);
+            border: 1px solid var(--c-border);
+        }
+
+        .day-status-pill {
+            font-size: 0.78rem;
+            font-weight: 700;
+            padding: 4px 12px;
+            border-radius: var(--r-chip);
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .day-status-pill.done {
+            background: var(--c-brand-light);
+            color: var(--c-brand-text);
+            border: 1px solid var(--status-done-border);
+        }
+
+        .day-status-pill.pending {
+            background: var(--c-surface-2);
+            color: var(--c-text-muted);
+            border: 1px solid var(--c-border);
+        }
+
+        .day-body {
+            padding: 20px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+        }
+
+        @media (max-width: 900px) {
+            .day-body {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .block-card {
+            background: var(--c-surface-2);
+            border: 1px solid var(--c-border-soft);
+            border-radius: 12px;
+            padding: 16px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            gap: 12px;
+            transition: all 0.15s ease;
+        }
+
+        .block-card:hover {
+            border-color: var(--c-border);
+            background: var(--c-surface);
+        }
+
+        .block-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .block-tag {
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            color: var(--c-text-muted);
+            letter-spacing: 0.5px;
+        }
+
+        .block-subj {
+            font-family: 'Outfit', sans-serif;
+            font-size: 1.05rem;
+            font-weight: 700;
+            color: var(--c-text);
+            margin-top: 4px;
+        }
+
+        .block-content {
+            font-size: 0.88rem;
+            color: var(--c-text-muted);
+            line-height: 1.45;
+            flex-grow: 1;
+        }
+
+        /* ==========================================================================
+           BADGES DE PRIORIDADE
+           ========================================================================== */
+        .prio-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            font-size: 0.72rem;
+            font-weight: 700;
+            padding: 3px 10px;
+            border-radius: var(--r-chip);
+            white-space: nowrap;
+            letter-spacing: 0.2px;
+        }
+
+        .prio-pill::before {
+            content: '';
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+        }
+
+        .prio-alta {
+            background: var(--prio-high-bg);
+            color: var(--prio-high-text);
+            border: 1px solid var(--prio-high-border);
+        }
+        .prio-alta::before { background: var(--prio-high-dot); }
+
+        .prio-media {
+            background: var(--prio-med-bg);
+            color: var(--prio-med-text);
+            border: 1px solid var(--prio-med-border);
+        }
+        .prio-media::before { background: var(--prio-med-dot); }
+
+        .prio-baixa {
+            background: var(--prio-low-bg);
+            color: var(--prio-low-text);
+            border: 1px solid var(--prio-low-border);
+        }
+        .prio-baixa::before { background: var(--prio-low-dot); }
+
+        /* ==========================================================================
+           CHECKBOXES PERSONALIZADOS
+           ========================================================================== */
+        .custom-checkbox-container {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            cursor: pointer;
+            font-size: 0.85rem;
+            font-weight: 600;
+            user-select: none;
+            color: var(--c-text);
+            padding: 6px 10px;
+            border-radius: 8px;
+            background: var(--c-surface);
+            border: 1px solid var(--c-border);
+            transition: all 0.15s ease;
+            width: fit-content;
+        }
+
+        .custom-checkbox-container:hover {
+            border-color: var(--c-brand);
+            background: var(--c-brand-subtle);
+        }
+
+        .custom-checkbox-container input {
+            position: absolute;
+            opacity: 0;
+            cursor: pointer;
+            height: 0;
+            width: 0;
+        }
+
+        .checkmark {
+            height: 18px;
+            width: 18px;
+            background-color: var(--c-surface-2);
+            border: 1.5px solid var(--c-border);
+            border-radius: 5px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.15s ease;
+            flex-shrink: 0;
+        }
+
+        .custom-checkbox-container input:checked ~ .checkmark {
+            background-color: var(--c-brand);
+            border-color: var(--c-brand);
+        }
+
+        .checkmark:after {
+            content: "✓";
+            color: white;
+            font-size: 11px;
+            font-weight: 800;
+            display: none;
+        }
+
+        .custom-checkbox-container input:checked ~ .checkmark:after {
+            display: block;
+        }
+
+        /* ==========================================================================
+           RODAPÉ DO DIA (DAY FOOTER) & ANOTAÇÕES
+           ========================================================================== */
+        .day-footer {
+            background: var(--c-surface-2);
+            border-top: 1px solid var(--c-border-soft);
+            padding: 12px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+
+        .exercise-info {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 0.85rem;
+            color: var(--c-text);
+            font-weight: 500;
+        }
+
+        .exercise-badge {
+            background: var(--brand-gold-light);
+            color: var(--brand-gold-text);
+            border: 1px solid rgba(232, 149, 26, 0.3);
+            font-weight: 700;
+            font-size: 0.72rem;
+            padding: 3px 10px;
+            border-radius: var(--r-chip);
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .note-container {
+            padding: 0 20px 16px;
+            background: var(--c-surface-2);
+        }
+
+        .note-input {
+            width: 100%;
+            background: var(--c-surface);
+            border: 1px solid var(--c-border);
+            color: var(--c-text);
+            padding: 8px 12px;
+            border-radius: var(--r-input);
+            font-size: 0.82rem;
+            transition: all 0.15s ease;
+        }
+
+        .note-input:focus {
+            border-color: var(--c-brand);
+            box-shadow: 0 0 0 3px var(--c-brand-light);
+        }
+
+        /* ==========================================================================
+           TABELA DE REVISÕES & DISTRIBUIÇÃO
+           ========================================================================== */
+        .table-card {
+            background: var(--c-surface);
+            border: 1px solid var(--c-border);
+            border-radius: var(--r-card);
+            box-shadow: var(--shadow-card);
+            overflow: hidden;
+        }
+
+        .table-responsive {
+            overflow-x: auto;
+            width: 100%;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.88rem;
+            text-align: left;
+        }
+
+        th {
+            background: var(--c-surface-2);
+            color: var(--c-text);
+            font-family: 'Outfit', sans-serif;
+            font-weight: 700;
+            font-size: 0.82rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            padding: 14px 18px;
+            border-bottom: 1px solid var(--c-border);
+            white-space: nowrap;
+        }
+
+        td {
+            padding: 14px 18px;
+            border-bottom: 1px solid var(--c-border-soft);
+            vertical-align: middle;
+            color: var(--c-text);
+        }
+
+        tr:last-child td {
+            border-bottom: none;
+        }
+
+        tr:hover td {
+            background: var(--c-surface-hover);
+        }
+
+        .rev-check-cell {
+            text-align: center;
+        }
+
+        .rev-check-btn {
+            cursor: pointer;
+            padding: 5px 12px;
+            border-radius: var(--r-chip);
+            border: 1px solid var(--c-border);
+            background: var(--c-surface);
+            font-size: 0.78rem;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            transition: all 0.15s ease;
+            color: var(--c-text-muted);
+            user-select: none;
+        }
+
+        .rev-check-btn:hover {
+            border-color: var(--c-brand);
+            background: var(--c-brand-subtle);
+            color: var(--c-brand-text);
+        }
+
+        .rev-check-btn.checked {
+            background: var(--c-brand-light);
+            border-color: var(--status-done-border);
+            color: var(--c-brand-text);
+            font-weight: 700;
+        }
+
+        /* ==========================================================================
+           TOAST NOTIFICATION (FEEDBACK VISUAL)
+           ========================================================================== */
+        .toast {
+            position: fixed;
+            bottom: 24px;
+            right: 24px;
+            background: var(--navy-brand-dark);
+            color: #FFFFFF;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-left: 4px solid var(--c-brand);
+            padding: 14px 20px;
+            border-radius: var(--r-btn);
+            box-shadow: var(--shadow-float);
+            transform: translateY(120px);
+            opacity: 0;
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+            z-index: 9999;
+            font-size: 0.88rem;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .toast.show {
+            transform: translateY(0);
+            opacity: 1;
+        }
+
+        /* ==========================================================================
+           MODAL DE CONFIRMAÇÃO & NUVEM
+           ========================================================================== */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(11, 15, 25, 0.6);
+            backdrop-filter: blur(4px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.2s ease;
+        }
+
+        .modal-overlay.show {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .modal-card {
+            background: var(--c-surface);
+            border: 1px solid var(--c-border);
+            border-radius: var(--r-card);
+            padding: 24px;
+            max-width: 460px;
+            width: 90%;
+            box-shadow: var(--shadow-float);
+            transform: scale(0.95);
+            transition: transform 0.2s ease;
+        }
+
+        .modal-overlay.show .modal-card {
+            transform: scale(1);
+        }
+
+        .modal-card h3 {
+            font-family: 'Outfit', sans-serif;
+            font-size: 1.2rem;
+            font-weight: 700;
+            margin-bottom: 8px;
+            color: var(--c-text);
+        }
+
+        .modal-card p {
+            font-size: 0.88rem;
+            color: var(--c-text-muted);
+            margin-bottom: 18px;
+            line-height: 1.45;
+        }
+
+        .modal-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        /* ==========================================================================
+           RODAPÉ INFORMATIVO
+           ========================================================================== */
+        footer {
+            margin-top: 40px;
+            text-align: center;
+            font-size: 0.8rem;
+            color: var(--c-text-muted);
+            padding-top: 20px;
+            border-top: 1px solid var(--c-border);
+        }
+
+        .footer-brand-signature {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            font-weight: 600;
+            color: var(--c-text);
+            margin-bottom: 4px;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- CABEÇALHO DA MARCA & PRODUTO -->
+    <header>
+        <div class="header-content">
+            <div class="brand-container">
+                <div class="brand-badge-logo">N</div>
+                <div class="brand-text">
+                    <h1>
+                        TCE-MA • Painel de Estudos
+                        <span class="product-tag">Nacarat SaaS</span>
+                    </h1>
+                    <p>Técnico Estadual de Controle Externo — Especialidade Técnico-Administrativa (Cebraspe 2026)</p>
+                </div>
+            </div>
+            <div class="header-actions">
+                <div class="cloud-badge" id="cloudBadge" onclick="openCloudModal()" title="Configurar ou sincronizar na nuvem">
+                    <span id="cloudIcon">☁️</span> <span id="cloudStatusText">Modo Nuvem</span>
+                </div>
+                <button class="btn btn-secondary" onclick="toggleTheme()" id="themeBtn" title="Alternar tema Claro/Escuro">
+                    <span id="themeIcon">🌙</span> <span id="themeText">Modo Escuro</span>
+                </button>
+                <button class="btn btn-secondary" onclick="exportData()" title="Salvar backup em arquivo JSON">
+                    📥 Exportar
+                </button>
+                <label class="btn btn-secondary" style="cursor: pointer;" title="Restaurar progresso de um arquivo JSON">
+                    📤 Importar
+                    <input type="file" id="importInput" style="display:none" onchange="importData(event)">
+                </label>
+                <button class="btn btn-danger-ghost" onclick="openResetModal()" title="Reiniciar todas as marcações">
+                    🔄 Resetar
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <div class="container">
+        
+        <!-- CARDS DE MÉTRICAS PRINCIPAIS -->
+        <div class="stats-grid">
+            <div class="stat-card stat-countdown">
+                <div class="stat-header">
+                    <span class="stat-label">Contagem Regressiva</span>
+                    <span class="stat-icon">🎯</span>
+                </div>
+                <div class="stat-value" id="countdownVal">-- dias</div>
+                <div class="stat-sub">📅 Prova: 29 de Novembro de 2026</div>
+            </div>
+
+            <div class="stat-card stat-days">
+                <div class="stat-header">
+                    <span class="stat-label">Dias Concluídos</span>
+                    <span class="stat-icon">📅</span>
+                </div>
+                <div class="stat-value" id="daysDoneVal">
+                    0 <span class="stat-value-sub">/ 90 dias</span>
+                </div>
+                <div class="progress-bar-container">
+                    <div class="progress-bar-fill" id="daysProgressFill" style="width: 0%"></div>
+                </div>
+            </div>
+
+            <div class="stat-card stat-revs">
+                <div class="stat-header">
+                    <span class="stat-label">Revisões Espaçadas</span>
+                    <span class="stat-icon">🔄</span>
+                </div>
+                <div class="stat-value" id="revsDoneVal">0%</div>
+                <div class="progress-bar-container">
+                    <div class="progress-bar-fill" id="revsProgressFill" style="width: 0%; background: var(--grad-navy)"></div>
+                </div>
+            </div>
+
+            <div class="stat-card stat-questions">
+                <div class="stat-header">
+                    <span class="stat-label">Questões Praticadas</span>
+                    <span class="stat-icon">📝</span>
+                </div>
+                <div class="stat-value" id="questionsDoneVal">
+                    0 <span class="stat-value-sub">/ ~5.400</span>
+                </div>
+                <div class="stat-sub">⚡ Meta: ~60 questões/dia</div>
+            </div>
+        </div>
+
+        <!-- NAVEGAÇÃO DE ABAS -->
+        <div class="tabs-nav-container">
+            <button class="tab-btn active" onclick="switchTab('crono')">
+                📅 Cronograma Diário (90 Dias)
+            </button>
+            <button class="tab-btn" onclick="switchTab('revisoes')">
+                🔄 Controle de Revisões (D+1, D+7, D+30)
+            </button>
+            <button class="tab-btn" onclick="switchTab('edital')">
+                🎯 Matriz & Distribuição do Edital
+            </button>
+        </div>
+
+        <!-- ABA 1: CRONOGRAMA DIÁRIO -->
+        <div id="tab-crono" class="tab-pane active">
+            <div class="filter-bar">
+                <div class="filter-group">
+                    <div class="filter-item">
+                        <span class="filter-label">Semana:</span>
+                        <select id="weekFilter" onchange="renderSchedule()">
+                            <option value="all">Todas as 15 Semanas</option>
+                            <option value="1">Semana 1 (18/08 a 23/08)</option>
+                            <option value="2">Semana 2 (25/08 a 30/08)</option>
+                            <option value="3">Semana 3 (01/09 a 06/09)</option>
+                            <option value="4">Semana 4 (08/09 a 13/09)</option>
+                            <option value="5">Semana 5 (15/09 a 20/09)</option>
+                            <option value="6">Semana 6 (22/09 a 27/09)</option>
+                            <option value="7">Semana 7 (29/09 a 04/10)</option>
+                            <option value="8">Semana 8 (06/10 a 11/10)</option>
+                            <option value="9">Semana 9 (13/10 a 18/10)</option>
+                            <option value="10">Semana 10 (20/10 a 25/10)</option>
+                            <option value="11">Semana 11 (27/10 a 01/11)</option>
+                            <option value="12">Semana 12 (03/11 a 08/11) 🟢 Baixa Prio</option>
+                            <option value="13">Semana 13 (10/11 a 15/11)</option>
+                            <option value="14">Semana 14 (17/11 a 22/11)</option>
+                            <option value="15">Semana 15 (23/11 a 28/11) ⚡ Revisão Geral</option>
+                        </select>
+                    </div>
+
+                    <div class="filter-item">
+                        <span class="filter-label">Status:</span>
+                        <select id="statusFilter" onchange="renderSchedule()">
+                            <option value="all">Todos os Dias</option>
+                            <option value="pending">Apenas Pendentes</option>
+                            <option value="completed">Apenas Concluídos</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="filter-group">
+                    <div class="search-box">
+                        <span class="search-icon">🔍</span>
+                        <input type="text" id="scheduleSearch" placeholder="Buscar por assunto ou matéria..." oninput="renderSchedule()">
+                    </div>
+                </div>
+            </div>
+
+            <div class="schedule-grid" id="scheduleList">
+                <!-- Conteúdo gerado dinamicamente via JS -->
+            </div>
+        </div>
+
+        <!-- ABA 2: REVISÕES ESPAÇADAS -->
+        <div id="tab-revisoes" class="tab-pane">
+            <div class="filter-bar">
+                <div class="filter-group">
+                    <div class="filter-item">
+                        <span class="filter-label">Prioridade:</span>
+                        <select id="revPrioFilter" onchange="renderRevisoes()">
+                            <option value="all">Todas as Prioridades</option>
+                            <option value="alta">🔴 Alta Prioridade</option>
+                            <option value="media">🟡 Média Prioridade</option>
+                            <option value="baixa">🟢 Baixa Prioridade</option>
+                        </select>
+                    </div>
+
+                    <div class="filter-item">
+                        <span class="filter-label">Disciplina:</span>
+                        <select id="revDiscFilter" onchange="renderRevisoes()">
+                            <option value="all">Todas as Disciplinas</option>
+                            <option value="Dir. Constitucional">Dir. Constitucional</option>
+                            <option value="Dir. Administrativo">Dir. Administrativo</option>
+                            <option value="Gestão de Contratos">Gestão de Contratos</option>
+                            <option value="Exec. Orçamentária">Exec. Orçamentária</option>
+                            <option value="Informática">Informática</option>
+                            <option value="Raciocínio Lógico">Raciocínio Lógico</option>
+                            <option value="Controle Externo">Controle Externo</option>
+                            <option value="Legislação Específica">Legislação Específica</option>
+                            <option value="História do MA">História do MA</option>
+                            <option value="Geografia do MA">Geografia do MA</option>
+                            <option value="Direitos Humanos">Direitos Humanos</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="filter-group">
+                    <div class="search-box">
+                        <span class="search-icon">🔍</span>
+                        <input type="text" id="revSearch" placeholder="Buscar tópico de revisão..." oninput="renderRevisoes()">
+                    </div>
+                </div>
+            </div>
+
+            <div class="table-card">
+                <div class="table-responsive">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Prioridade</th>
+                                <th>Disciplina</th>
+                                <th>Tópico do Edital</th>
+                                <th>Estudo Inicial</th>
+                                <th style="text-align:center">D+1 (24h)</th>
+                                <th style="text-align:center">D+7 (1 sem)</th>
+                                <th style="text-align:center">D+30 (1 mês)</th>
+                                <th>Progresso do Ciclo</th>
+                            </tr>
+                        </thead>
+                        <tbody id="revisoesTableBody">
+                            <!-- Conteúdo gerado dinamicamente via JS -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- ABA 3: EDITAL & DISTRIBUIÇÃO -->
+        <div id="tab-edital" class="tab-pane">
+            <div class="table-card">
+                <div class="table-responsive">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Disciplina</th>
+                                <th>Prioridade</th>
+                                <th>Conhecimento Prévio</th>
+                                <th>Sessões de Conteúdo Novo</th>
+                                <th>Sessões de Revisão</th>
+                                <th>Total de Sessões</th>
+                                <th>Carga Horária Total</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>Noções de Direito Constitucional</strong></td>
+                                <td><span class="prio-pill prio-alta">Alta Prioridade</span></td>
+                                <td><span style="color: var(--c-brand); font-weight: 600;">✅ Sim (Base Sólida)</span></td>
+                                <td>10</td>
+                                <td>12</td>
+                                <td><strong>22</strong></td>
+                                <td><strong>44h</strong></td>
+                            </tr>
+                            <tr>
+                                <td><strong>Noções de Direito Administrativo</strong></td>
+                                <td><span class="prio-pill prio-alta">Alta Prioridade</span></td>
+                                <td><span style="color: var(--c-brand); font-weight: 600;">✅ Sim (Base Sólida)</span></td>
+                                <td>8</td>
+                                <td>10</td>
+                                <td><strong>18</strong></td>
+                                <td><strong>36h</strong></td>
+                            </tr>
+                            <tr>
+                                <td><strong>Execução Orçamentária e Financeira</strong></td>
+                                <td><span class="prio-pill prio-alta">Alta Prioridade</span></td>
+                                <td><span style="color: var(--c-brand); font-weight: 600;">✅ Sim (Base Sólida)</span></td>
+                                <td>7</td>
+                                <td>8</td>
+                                <td><strong>15</strong></td>
+                                <td><strong>30h</strong></td>
+                            </tr>
+                            <tr>
+                                <td><strong>Gestão de Contratos</strong></td>
+                                <td><span class="prio-pill prio-alta">Alta Prioridade</span></td>
+                                <td><span style="color: var(--c-brand); font-weight: 600;">✅ Sim (Base Sólida)</span></td>
+                                <td>4</td>
+                                <td>6</td>
+                                <td><strong>10</strong></td>
+                                <td><strong>20h</strong></td>
+                            </tr>
+                            <tr>
+                                <td><strong>Raciocínio Lógico</strong></td>
+                                <td><span class="prio-pill prio-media">Média Prioridade</span></td>
+                                <td><span style="color: var(--brand-gold-text); font-weight: 600;">❌ Do Zero</span></td>
+                                <td>8</td>
+                                <td>8</td>
+                                <td><strong>16</strong></td>
+                                <td><strong>32h</strong></td>
+                            </tr>
+                            <tr>
+                                <td><strong>Competências Digitais e Informática</strong></td>
+                                <td><span class="prio-pill prio-media">Média Prioridade</span></td>
+                                <td><span style="color: var(--brand-gold-text); font-weight: 600;">❌ Do Zero</span></td>
+                                <td>7</td>
+                                <td>8</td>
+                                <td><strong>15</strong></td>
+                                <td><strong>30h</strong></td>
+                            </tr>
+                            <tr>
+                                <td><strong>Controle Externo</strong></td>
+                                <td><span class="prio-pill prio-media">Média Prioridade</span></td>
+                                <td><span style="color: var(--c-brand); font-weight: 600;">✅ Sim (Base Sólida)</span></td>
+                                <td>6</td>
+                                <td>6</td>
+                                <td><strong>12</strong></td>
+                                <td><strong>24h</strong></td>
+                            </tr>
+                            <tr>
+                                <td><strong>Legislação Específica</strong></td>
+                                <td><span class="prio-pill prio-media">Média Prioridade</span></td>
+                                <td><span style="color: var(--c-brand); font-weight: 600;">✅ Sim (Base Sólida)</span></td>
+                                <td>4</td>
+                                <td>5</td>
+                                <td><strong>9</strong></td>
+                                <td><strong>18h</strong></td>
+                            </tr>
+                            <tr>
+                                <td><strong>História e Geografia do Maranhão</strong></td>
+                                <td><span class="prio-pill prio-baixa">Baixa (03/11)</span></td>
+                                <td><span style="color: var(--c-text-muted); font-weight: 600;">🎯 Foco na Reta Final</span></td>
+                                <td>6</td>
+                                <td>3</td>
+                                <td><strong>9</strong></td>
+                                <td><strong>18h</strong></td>
+                            </tr>
+                            <tr>
+                                <td><strong>Noções de Direitos Humanos</strong></td>
+                                <td><span class="prio-pill prio-baixa">Baixa (10/11)</span></td>
+                                <td><span style="color: var(--c-text-muted); font-weight: 600;">🎯 Foco na Reta Final</span></td>
+                                <td>4</td>
+                                <td>2</td>
+                                <td><strong>6</strong></td>
+                                <td><strong>12h</strong></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- RODAPÉ -->
+        <footer>
+            <div class="footer-brand-signature">
+                <span>Nacarat Soluções Digitais</span> • <span>Assistente Digital Micro-SaaS</span>
+            </div>
+            <p>"Colocamos tecnologia para trabalhar por você."</p>
+        </footer>
+
+    </div>
+
+    <!-- MODAL DE NUVEM & PIN -->
+    <div class="modal-overlay" id="cloudModal">
+        <div class="modal-card">
+            <h3>☁️ Sincronização na Nuvem (Vercel KV)</h3>
+            <p>Digite uma senha pessoal (PIN ou palavra-chave) para sincronizar seu progresso em qualquer aparelho (celular, tablet e computadores).</p>
+            <div style="display: flex; flex-direction: column; gap: 8px; margin-bottom: 14px;">
+                <label style="font-size: 0.8rem; font-weight: 700; color: var(--c-text-muted);">Seu PIN / Chave Pessoal:</label>
+                <input type="text" id="cloudPinInput" placeholder="Ex: meu-pin-1234" style="width: 100%; font-size: 1rem; font-weight: 600; padding: 10px 14px;">
+            </div>
+            <p style="font-size: 0.78rem; color: var(--c-text-muted); line-height: 1.4;">
+                🔒 Seus dados são salvos no seu banco de dados seguro da Vercel. O mesmo PIN usado aqui deve ser colocado nos seus outros dispositivos.
+            </p>
+            <div class="modal-actions">
+                <button class="btn btn-secondary" onclick="closeCloudModal()">Fechar</button>
+                <button class="btn btn-primary" onclick="saveCloudPinAndSync()">Salvar e Sincronizar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL DE RESET -->
+    <div class="modal-overlay" id="resetModal">
+        <div class="modal-card">
+            <h3>⚠️ Confirmar Reset de Progresso</h3>
+            <p>Tem certeza de que deseja resetar todas as marcações de estudo, questões resolvidas, anotações e ciclos de revisão? Esta ação não pode ser desfeita.</p>
+            <div class="modal-actions">
+                <button class="btn btn-secondary" onclick="closeResetModal()">Cancelar</button>
+                <button class="btn btn-primary" style="background: #DC2626; border-color: #B91C1C;" onclick="confirmResetExecution()">Sim, Resetar Tudo</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- NOTIFICAÇÃO TOAST -->
+    <div id="toast" class="toast">💾 Progresso salvo automaticamente!</div>
+
+    <script>
+        /* ==========================================================================
+           DADOS COMPLETOS DE ESTUDO & REVISÕES (TCE-MA)
+           ========================================================================== */
+        const daysData = [
+            {"fase": "Fase 1: Fundações", "semana": 1, "data": "18/08/2026", "dia": "Segunda", "b1_mat": "Dir. Constitucional", "b1_top": "CF/88: conceito, classificações, princípios fundamentais, emendas constitucionais", "b2_mat": "Raciocínio Lógico", "b2_top": "Estruturas lógicas, proposições simples e compostas", "exercicios": "30q Dir. Const. + 30q Rac. Lógico"},
+            {"fase": "Fase 1: Fundações", "semana": 1, "data": "19/08/2026", "dia": "Terça", "b1_mat": "Dir. Administrativo", "b1_top": "Organização administrativa: centralização, descentralização, adm. direta/indireta, autarquias, fundações, EP, SEM", "b2_mat": "Informática", "b2_top": "Competências digitais: cultura digital, cidadania digital, letramento digital, Lei 14.533/2023, pensamento computacional", "exercicios": "30q Dir. Adm. + 30q Informática"},
+            {"fase": "Fase 1: Fundações", "semana": 1, "data": "20/08/2026", "dia": "Quarta", "b1_mat": "Dir. Constitucional", "b1_top": "Direitos e garantias fundamentais: direitos e deveres individuais e coletivos", "b2_mat": "Raciocínio Lógico", "b2_top": "Tabelas-verdade, equivalências, Leis de Morgan", "exercicios": "30q Dir. Const. + 30q Rac. Lógico"},
+            {"fase": "Fase 1: Fundações", "semana": 1, "data": "21/08/2026", "dia": "Quinta", "b1_mat": "Dir. Administrativo", "b1_top": "Ato administrativo: conceito, requisitos, atributos, classificação e espécies", "b2_mat": "Informática", "b2_top": "Sistemas operacionais (Windows), editores de texto, planilhas e apresentações (MS Office)", "exercicios": "30q Dir. Adm. + 30q Informática"},
+            {"fase": "Fase 1: Fundações", "semana": 1, "data": "22/08/2026", "dia": "Sexta", "b1_mat": "Gestão de Contratos", "b1_top": "Lei nº 14.133/2021: visão geral, princípios, modalidades aplicáveis", "b2_mat": "Controle Externo", "b2_top": "Conceito, tipos e formas de controle; controle interno e externo", "exercicios": "30q Gestão + 30q Controle Ext."},
+            {"fase": "Fase 1: Fundações", "semana": 1, "data": "23/08/2026", "dia": "Sábado", "b1_mat": "Exec. Orçamentária", "b1_top": "Programação e execução de recursos: empenho, liquidação, pagamento da despesa", "b2_mat": "Legislação Específica", "b2_top": "Regimento Interno do TCE/MA (visão geral, estrutura e competências)", "exercicios": "30q Exec. Orç. + 30q Leg. Esp."},
+            {"fase": "Fase 1: Fundações", "semana": 2, "data": "25/08/2026", "dia": "Segunda", "b1_mat": "Dir. Constitucional", "b1_top": "Direitos sociais, nacionalidade, cidadania, direitos políticos, partidos políticos", "b2_mat": "Raciocínio Lógico", "b2_top": "Lógica de argumentação: analogias, inferências, deduções e conclusões", "exercicios": "30q Dir. Const. + 30q Rac. Lógico"},
+            {"fase": "Fase 1: Fundações", "semana": 2, "data": "26/08/2026", "dia": "Terça", "b1_mat": "Dir. Administrativo", "b1_top": "Agentes públicos: disposições constitucionais, conceito, espécies, cargo/emprego/função", "b2_mat": "Informática", "b2_top": "Redes de computadores: LAN, WAN, Internet, protocolos (TCP/IP, HTTP, SMTP, FTP), interoperabilidade", "exercicios": "30q Dir. Adm. + 30q Informática"},
+            {"fase": "Fase 1: Fundações", "semana": 2, "data": "27/08/2026", "dia": "Quarta", "b1_mat": "Dir. Constitucional", "b1_top": "Organização político-administrativa: União, estados, DF, municípios", "b2_mat": "Raciocínio Lógico", "b2_top": "Diagramas lógicos e lógica de primeira ordem", "exercicios": "30q Dir. Const. + 30q Rac. Lógico"},
+            {"fase": "Fase 1: Fundações", "semana": 2, "data": "28/08/2026", "dia": "Quinta", "b1_mat": "Dir. Administrativo", "b1_top": "Poderes administrativos: hierárquico, disciplinar, regulamentar, de polícia; uso e abuso", "b2_mat": "Informática", "b2_top": "Ferramentas de comunicação e colaboração: e-mail, Teams, Meet, trabalho remoto", "exercicios": "30q Dir. Adm. + 30q Informática"},
+            {"fase": "Fase 1: Fundações", "semana": 2, "data": "29/08/2026", "dia": "Sexta", "b1_mat": "Gestão de Contratos", "b1_top": "Elaboração e fiscalização: cláusulas, indicadores de nível de serviço, papel do fiscalizador e preposto", "b2_mat": "Controle Externo", "b2_top": "Controle parlamentar e controle pelos tribunais de contas", "exercicios": "30q Gestão + 30q Controle Ext."},
+            {"fase": "Fase 1: Fundações", "semana": 2, "data": "30/08/2026", "dia": "Sábado", "b1_mat": "Exec. Orçamentária", "b1_top": "GRU, sistemas de informações, controle e pagamento de restos a pagar e DEA", "b2_mat": "Legislação Específica", "b2_top": "Lei nº 8.258/2005 (Lei Orgânica do TCE/MA)", "exercicios": "30q Exec. Orç. + 30q Leg. Esp."},
+            {"fase": "Fase 1: Fundações", "semana": 3, "data": "01/09/2026", "dia": "Segunda", "b1_mat": "Dir. Constitucional", "b1_top": "Administração pública: disposições gerais e servidores públicos", "b2_mat": "Raciocínio Lógico", "b2_top": "Princípios de contagem e probabilidade", "exercicios": "30q Dir. Const. + 30q Rac. Lógico"},
+            {"fase": "Fase 1: Fundações", "semana": 3, "data": "02/09/2026", "dia": "Terça", "b1_mat": "Dir. Administrativo", "b1_top": "Licitação: princípios, dispensa, inexigibilidade, modalidades, tipos, procedimento", "b2_mat": "Informática", "b2_top": "Segurança da informação: backup, vírus, antivírus, firewall, phishing, pharming", "exercicios": "30q Dir. Adm. + 30q Informática"},
+            {"fase": "Fase 1: Fundações", "semana": 3, "data": "03/09/2026", "dia": "Quarta", "b1_mat": "Dir. Constitucional", "b1_top": "Poder Legislativo: Congresso Nacional, Câmara, Senado, processo legislativo, fiscalização, CPIs", "b2_mat": "Raciocínio Lógico", "b2_top": "Operações com conjuntos", "exercicios": "30q Dir. Const. + 30q Rac. Lógico"},
+            {"fase": "Fase 1: Fundações", "semana": 3, "data": "04/09/2026", "dia": "Quinta", "b1_mat": "Dir. Administrativo", "b1_top": "Controle da administração pública: controle administrativo, judicial e legislativo", "b2_mat": "Informática", "b2_top": "LGPD (Lei 13.709/2018): conceitos fundamentais, direitos dos titulares, aplicação no setor público", "exercicios": "30q Dir. Adm. + 30q Informática"},
+            {"fase": "Fase 1: Fundações", "semana": 3, "data": "05/09/2026", "dia": "Sexta", "b1_mat": "Gestão de Contratos", "b1_top": "Acompanhamento da execução contratual, registro de irregularidades, penalidades e sanções", "b2_mat": "Controle Externo", "b2_top": "Controle administrativo e Lei de Improbidade Administrativa (Lei 8.429/1992)", "exercicios": "30q Gestão + 30q Controle Ext."},
+            {"fase": "Fase 1: Fundações", "semana": 3, "data": "06/09/2026", "dia": "Sábado", "b1_mat": "Exec. Orçamentária", "b1_top": "Suprimento de fundos, conformidade diária e documental, rol de responsáveis", "b2_mat": "Legislação Específica", "b2_top": "Lei nº 9.936/2013 (Organização administrativa do TCE/MA)", "exercicios": "30q Exec. Orç. + 30q Leg. Esp."},
+            {"fase": "Fase 1: Fundações", "semana": 4, "data": "08/09/2026", "dia": "Segunda", "b1_mat": "Dir. Constitucional", "b1_top": "Poder Executivo: atribuições do presidente da República e dos ministros de Estado", "b2_mat": "Raciocínio Lógico", "b2_top": "Problemas aritméticos, geométricos e matriciais", "exercicios": "30q Dir. Const. + 30q Rac. Lógico"},
+            {"fase": "Fase 1: Fundações", "semana": 4, "data": "09/09/2026", "dia": "Terça", "b1_mat": "Dir. Administrativo", "b1_top": "Responsabilidade civil do Estado: ato comissivo, omissão, requisitos, excludentes e atenuantes", "b2_mat": "Informática", "b2_top": "Armazenamento em nuvem, assinatura digital, Marco Civil da Internet (Lei 12.965/2014)", "exercicios": "30q Dir. Adm. + 30q Informática"},
+            {"fase": "Fase 1: Fundações", "semana": 4, "data": "10/09/2026", "dia": "Quarta", "b1_mat": "Dir. Constitucional", "b1_top": "Poder Judiciário: disposições gerais, órgãos, competências, CNJ (composição e competência)", "b2_mat": "Raciocínio Lógico", "b2_top": "Revisão geral de Raciocínio Lógico + resolução intensiva de questões variadas", "exercicios": "30q Dir. Const. + 30q Rac. Lógico"},
+            {"fase": "Fase 1: Fundações", "semana": 4, "data": "11/09/2026", "dia": "Quinta", "b1_mat": "Dir. Administrativo", "b1_top": "Revisão geral de Direito Administrativo (tópicos 1-7)", "b2_mat": "Informática", "b2_top": "Governo digital: Gov.br, Portal Nacional de Dados Abertos, LAI (Lei 12.527/2011)", "exercicios": "30q Dir. Adm. + 30q Informática"},
+            {"fase": "Fase 1: Fundações", "semana": 4, "data": "12/09/2026", "dia": "Sexta", "b1_mat": "Gestão de Contratos", "b1_top": "Revisão geral de Gestão de Contratos (todos os tópicos)", "b2_mat": "Controle Externo", "b2_top": "Sistemas de controle jurisdicional: contencioso adm. e sistema da jurisdição una", "exercicios": "30q Gestão + 30q Controle Ext."},
+            {"fase": "Fase 1: Fundações", "semana": 4, "data": "13/09/2026", "dia": "Sábado", "b1_mat": "Exec. Orçamentária", "b1_top": "Retenção e recolhimento de tributos incidentes sobre bens e serviços", "b2_mat": "Legislação Específica", "b2_top": "IN nº 50/2017 e alterações + IN nº 82/2025", "exercicios": "30q Exec. Orç. + 30q Leg. Esp."},
+            {"fase": "Fase 2: Aprofundamento", "semana": 5, "data": "15/09/2026", "dia": "Segunda", "b1_mat": "Dir. Constitucional", "b1_top": "Funções essenciais à Justiça: MP, advocacia pública, defensoria pública", "b2_mat": "Controle Externo", "b2_top": "Controle jurisdicional da administração pública no direito brasileiro", "exercicios": "30q Dir. Const. + 30q Controle Ext."},
+            {"fase": "Fase 2: Aprofundamento", "semana": 5, "data": "16/09/2026", "dia": "Terça", "b1_mat": "Exec. Orçamentária", "b1_top": "SIAFI e CPR (contas a pagar e receber)", "b2_mat": "Informática", "b2_top": "SEI, Processo Eletrônico Nacional (PEN), assinatura e certificação digital", "exercicios": "30q Exec. Orç. + 30q Informática"},
+            {"fase": "Fase 2: Aprofundamento", "semana": 5, "data": "17/09/2026", "dia": "Quarta", "b1_mat": "Dir. Constitucional", "b1_top": "Artigos 23, 170, 225 e 231 da CF/88", "b2_mat": "Raciocínio Lógico", "b2_top": "🔄 Revisão D+7: estruturas lógicas, proposições, tabelas-verdade", "exercicios": "30q Dir. Const. + 30q Rac. Lógico"},
+            {"fase": "Fase 2: Aprofundamento", "semana": 5, "data": "18/09/2026", "dia": "Quinta", "b1_mat": "Exec. Orçamentária", "b1_top": "MCASP 11ª Edição (visão geral e principais mudanças)", "b2_mat": "Informática", "b2_top": "IA no setor público (IA generativa, chatbots), big data, IoT, ética e responsabilidade", "exercicios": "30q Exec. Orç. + 30q Informática"},
+            {"fase": "Fase 2: Aprofundamento", "semana": 5, "data": "19/09/2026", "dia": "Sexta", "b1_mat": "Gestão de Contratos", "b1_top": "🔄 Revisão D+7: Lei 14.133/2021 + fiscalização contratual", "b2_mat": "Controle Externo", "b2_top": "Controle da atividade financeira do Estado: espécies e sistemas", "exercicios": "30q Gestão + 30q Controle Ext."},
+            {"fase": "Fase 2: Aprofundamento", "semana": 5, "data": "20/09/2026", "dia": "Sábado", "b1_mat": "Exec. Orçamentária", "b1_top": "Lei de Responsabilidade Fiscal (LC 101/2000 e alterações)", "b2_mat": "Legislação Específica", "b2_top": "🔄 Revisão D+7: Regimento Interno + Lei Orgânica TCE/MA", "exercicios": "30q Exec. Orç. + 30q Leg. Esp."},
+            {"fase": "Fase 2: Aprofundamento", "semana": 6, "data": "22/09/2026", "dia": "Segunda", "b1_mat": "Dir. Constitucional", "b1_top": "🔄 Revisão D+30: CF/88 conceito + direitos fundamentais", "b2_mat": "Controle Externo", "b2_top": "TCU, tribunais de contas dos estados e do DF", "exercicios": "30q Dir. Const. + 30q Controle Ext."},
+            {"fase": "Fase 2: Aprofundamento", "semana": 6, "data": "23/09/2026", "dia": "Terça", "b1_mat": "Dir. Administrativo", "b1_top": "🔄 Revisão D+30: organização administrativa + ato administrativo", "b2_mat": "Informática", "b2_top": "🔄 Revisão D+7: segurança da informação + LGPD", "exercicios": "30q Dir. Adm. + 30q Informática"},
+            {"fase": "Fase 2: Aprofundamento", "semana": 6, "data": "24/09/2026", "dia": "Quarta", "b1_mat": "Exec. Orçamentária", "b1_top": "Revisão geral de Execução Orçamentária (todos os tópicos)", "b2_mat": "Raciocínio Lógico", "b2_top": "🔄 Revisão D+30: estruturas lógicas e proposições", "exercicios": "30q Exec. Orç. + 30q Rac. Lógico"},
+            {"fase": "Fase 2: Aprofundamento", "semana": 6, "data": "25/09/2026", "dia": "Quinta", "b1_mat": "Dir. Constitucional", "b1_top": "🔄 Revisão D+7: Poder Judiciário + funções essenciais à Justiça", "b2_mat": "Controle Externo", "b2_top": "TCE-MA na Constituição do Estado do Maranhão", "exercicios": "30q Dir. Const. + 30q Controle Ext."},
+            {"fase": "Fase 2: Aprofundamento", "semana": 6, "data": "26/09/2026", "dia": "Sexta", "b1_mat": "Dir. Administrativo", "b1_top": "🔄 Revisão D+7: responsabilidade civil do Estado", "b2_mat": "Informática", "b2_top": "Revisão geral de Informática (todos os tópicos estudados)", "exercicios": "30q Dir. Adm. + 30q Informática"},
+            {"fase": "Fase 2: Aprofundamento", "semana": 6, "data": "27/09/2026", "dia": "Sábado", "b1_mat": "Gestão de Contratos", "b1_top": "🔄 Revisão D+30: Lei 14.133/2021 completa", "b2_mat": "Legislação Específica", "b2_top": "🔄 Revisão D+7: Lei 9.936/2013 + INs 50/2017 e 82/2025", "exercicios": "30q Gestão + 30q Leg. Esp."},
+            {"fase": "Fase 2: Aprofundamento", "semana": 7, "data": "29/09/2026", "dia": "Segunda", "b1_mat": "Dir. Constitucional", "b1_top": "🔄 Revisão D+30: direitos sociais + organização político-administrativa", "b2_mat": "Controle Externo", "b2_top": "Revisão geral de Controle Externo (todos os tópicos)", "exercicios": "30q Dir. Const. + 30q Controle Ext."},
+            {"fase": "Fase 2: Aprofundamento", "semana": 7, "data": "30/09/2026", "dia": "Terça", "b1_mat": "Dir. Administrativo", "b1_top": "🔄 Revisão D+30: agentes públicos + poderes administrativos", "b2_mat": "Raciocínio Lógico", "b2_top": "🔄 Revisão D+30: tabelas-verdade, equivalências, Leis de Morgan", "exercicios": "30q Dir. Adm. + 30q Rac. Lógico"},
+            {"fase": "Fase 2: Aprofundamento", "semana": 7, "data": "01/10/2026", "dia": "Quarta", "b1_mat": "Exec. Orçamentária", "b1_top": "🔄 Revisão D+30: empenho, liquidação, pagamento", "b2_mat": "Informática", "b2_top": "🔄 Revisão D+30: competências digitais + SO Windows + MS Office", "exercicios": "30q Exec. Orç. + 30q Informática"},
+            {"fase": "Fase 2: Aprofundamento", "semana": 7, "data": "02/10/2026", "dia": "Quinta", "b1_mat": "Dir. Constitucional", "b1_top": "🔄 Revisão D+30: Poder Legislativo + Poder Executivo", "b2_mat": "Controle Externo", "b2_top": "🔄 Revisão D+30: conceitos + controle parlamentar + tribunais de contas", "exercicios": "30q Dir. Const. + 30q Controle Ext."},
+            {"fase": "Fase 2: Aprofundamento", "semana": 7, "data": "03/10/2026", "dia": "Sexta", "b1_mat": "Dir. Administrativo", "b1_top": "🔄 Revisão D+30: licitação (Lei 14.133/2021)", "b2_mat": "Raciocínio Lógico", "b2_top": "🔄 Revisão D+30: contagem, probabilidade e conjuntos", "exercicios": "30q Dir. Adm. + 30q Rac. Lógico"},
+            {"fase": "Fase 2: Aprofundamento", "semana": 7, "data": "04/10/2026", "dia": "Sábado", "b1_mat": "Gestão de Contratos", "b1_top": "🔄 Revisão D+30: fiscalização contratual + penalidades", "b2_mat": "Legislação Específica", "b2_top": "🔄 Revisão D+30: Regimento Interno + Lei Orgânica TCE/MA", "exercicios": "30q Gestão + 30q Leg. Esp."},
+            {"fase": "Fase 2: Aprofundamento", "semana": 8, "data": "06/10/2026", "dia": "Segunda", "b1_mat": "Dir. Constitucional", "b1_top": "🔄 Revisão D+30: Poder Judiciário + CNJ + funções essenciais", "b2_mat": "Informática", "b2_top": "🔄 Revisão D+30: redes de computadores + ferramentas de comunicação", "exercicios": "30q Dir. Const. + 30q Informática"},
+            {"fase": "Fase 2: Aprofundamento", "semana": 8, "data": "07/10/2026", "dia": "Terça", "b1_mat": "Dir. Administrativo", "b1_top": "🔄 Revisão D+30: controle da adm. pública + responsabilidade civil", "b2_mat": "Raciocínio Lógico", "b2_top": "🔄 Revisão D+30: problemas aritméticos, geométricos e matriciais", "exercicios": "30q Dir. Adm. + 30q Rac. Lógico"},
+            {"fase": "Fase 2: Aprofundamento", "semana": 8, "data": "08/10/2026", "dia": "Quarta", "b1_mat": "Exec. Orçamentária", "b1_top": "🔄 Revisão D+30: GRU + restos a pagar + suprimento de fundos", "b2_mat": "Controle Externo", "b2_top": "🔄 Revisão D+30: Lei de Improbidade + controle jurisdicional", "exercicios": "30q Exec. Orç. + 30q Controle Ext."},
+            {"fase": "Fase 2: Aprofundamento", "semana": 8, "data": "09/10/2026", "dia": "Quinta", "b1_mat": "Dir. Constitucional", "b1_top": "🔄 Revisão D+30: Art. 23, 170, 225 e 231 da CF/88", "b2_mat": "Informática", "b2_top": "🔄 Revisão D+30: segurança da informação + LGPD + Marco Civil", "exercicios": "30q Dir. Const. + 30q Informática"},
+            {"fase": "Fase 2: Aprofundamento", "semana": 8, "data": "10/10/2026", "dia": "Sexta", "b1_mat": "Exec. Orçamentária", "b1_top": "🔄 Revisão D+30: tributos + SIAFI + CPR + MCASP", "b2_mat": "Legislação Específica", "b2_top": "🔄 Revisão D+30: Lei 9.936/2013 + INs 50/2017 e 82/2025", "exercicios": "30q Exec. Orç. + 30q Leg. Esp."},
+            {"fase": "Fase 2: Aprofundamento", "semana": 8, "data": "11/10/2026", "dia": "Sábado", "b1_mat": "Exec. Orçamentária", "b1_top": "🔄 Revisão D+30: LRF (LC 101/2000)", "b2_mat": "Controle Externo", "b2_top": "🔄 Revisão D+30: TCU + TCE-MA na Constituição Estadual", "exercicios": "30q Exec. Orç. + 30q Controle Ext."},
+            {"fase": "Fase 3: Consolidação", "semana": 9, "data": "13/10/2026", "dia": "Segunda", "b1_mat": "Dir. Constitucional", "b1_top": "📝 Simulado temático: questões Cebraspe (constitucional completo)", "b2_mat": "Raciocínio Lógico", "b2_top": "📝 Simulado temático: questões Cebraspe (lógico completo)", "exercicios": "30q Dir. Const. + 30q Rac. Lógico"},
+            {"fase": "Fase 3: Consolidação", "semana": 9, "data": "14/10/2026", "dia": "Terça", "b1_mat": "Dir. Administrativo", "b1_top": "📝 Simulado temático: questões Cebraspe (administrativo completo)", "b2_mat": "Informática", "b2_top": "📝 Simulado temático: questões Cebraspe (informática completo)", "exercicios": "30q Dir. Adm. + 30q Informática"},
+            {"fase": "Fase 3: Consolidação", "semana": 9, "data": "15/10/2026", "dia": "Quarta", "b1_mat": "Gestão de Contratos", "b1_top": "📝 Simulado temático + revisão de pontos fracos", "b2_mat": "Controle Externo", "b2_top": "📝 Simulado temático + revisão de pontos fracos", "exercicios": "30q Gestão + 30q Controle Ext."},
+            {"fase": "Fase 3: Consolidação", "semana": 9, "data": "16/10/2026", "dia": "Quinta", "b1_mat": "Exec. Orçamentária", "b1_top": "📝 Simulado temático: questões Cebraspe (orçamentária completo)", "b2_mat": "Legislação Específica", "b2_top": "📝 Simulado temático + revisão de pontos fracos", "exercicios": "30q Exec. Orç. + 30q Leg. Esp."},
+            {"fase": "Fase 3: Consolidação", "semana": 9, "data": "17/10/2026", "dia": "Sexta", "b1_mat": "Dir. Constitucional", "b1_top": "🎯 Reforço: tópicos com maior índice de erro nos simulados", "b2_mat": "Informática", "b2_top": "🔄 Revisão D+30: Gov digital + SEI + PEN + IA no setor público", "exercicios": "30q Dir. Const. + 30q Informática"},
+            {"fase": "Fase 3: Consolidação", "semana": 9, "data": "18/10/2026", "dia": "Sábado", "b1_mat": "Dir. Administrativo", "b1_top": "🎯 Reforço: tópicos com maior índice de erro nos simulados", "b2_mat": "Raciocínio Lógico", "b2_top": "🎯 Reforço: tópicos com maior índice de erro", "exercicios": "30q Dir. Adm. + 30q Rac. Lógico"},
+            {"fase": "Fase 3: Consolidação", "semana": 10, "data": "20/10/2026", "dia": "Segunda", "b1_mat": "Dir. Constitucional", "b1_top": "Revisão aprofundada: direitos fundamentais (questões polêmicas e jurisprudência)", "b2_mat": "Controle Externo", "b2_top": "Revisão aprofundada: Lei de Improbidade (alterações recentes)", "exercicios": "30q Dir. Const. + 30q Controle Ext."},
+            {"fase": "Fase 3: Consolidação", "semana": 10, "data": "21/10/2026", "dia": "Terça", "b1_mat": "Dir. Administrativo", "b1_top": "Revisão aprofundada: licitação Lei 14.133/2021 (detalhamento)", "b2_mat": "Informática", "b2_top": "Revisão aprofundada: LGPD + governo digital", "exercicios": "30q Dir. Adm. + 30q Informática"},
+            {"fase": "Fase 3: Consolidação", "semana": 10, "data": "22/10/2026", "dia": "Quarta", "b1_mat": "Exec. Orçamentária", "b1_top": "Revisão aprofundada: MCASP 11ª ed. + LRF", "b2_mat": "Raciocínio Lógico", "b2_top": "Revisão aprofundada: lógica proposicional + argumentação", "exercicios": "30q Exec. Orç. + 30q Rac. Lógico"},
+            {"fase": "Fase 3: Consolidação", "semana": 10, "data": "23/10/2026", "dia": "Quinta", "b1_mat": "Gestão de Contratos", "b1_top": "Revisão aprofundada: fiscalização contratual + penalidades", "b2_mat": "Legislação Específica", "b2_top": "Revisão aprofundada: INs 50/2017 e 82/2025", "exercicios": "30q Gestão + 30q Leg. Esp."},
+            {"fase": "Fase 3: Consolidação", "semana": 10, "data": "24/10/2026", "dia": "Sexta", "b1_mat": "Dir. Constitucional", "b1_top": "Revisão: três poderes (Legislativo, Executivo, Judiciário)", "b2_mat": "Controle Externo", "b2_top": "Revisão: TCE-MA na Constituição Estadual", "exercicios": "30q Dir. Const. + 30q Controle Ext."},
+            {"fase": "Fase 3: Consolidação", "semana": 10, "data": "25/10/2026", "dia": "Sábado", "b1_mat": "Dir. Administrativo", "b1_top": "Revisão: agentes públicos + controle da adm. pública", "b2_mat": "Informática", "b2_top": "Revisão: tecnologias emergentes (IA, big data, IoT)", "exercicios": "30q Dir. Adm. + 30q Informática"},
+            {"fase": "Fase 3: Consolidação", "semana": 11, "data": "27/10/2026", "dia": "Segunda", "b1_mat": "Dir. Constitucional", "b1_top": "📝 2º Simulado completo + análise detalhada de erros", "b2_mat": "Raciocínio Lógico", "b2_top": "📝 2º Simulado completo + análise detalhada de erros", "exercicios": "30q Dir. Const. + 30q Rac. Lógico"},
+            {"fase": "Fase 3: Consolidação", "semana": 11, "data": "28/10/2026", "dia": "Terça", "b1_mat": "Dir. Administrativo", "b1_top": "📝 2º Simulado completo + análise detalhada de erros", "b2_mat": "Informática", "b2_top": "📝 2º Simulado completo + análise detalhada de erros", "exercicios": "30q Dir. Adm. + 30q Informática"},
+            {"fase": "Fase 3: Consolidação", "semana": 11, "data": "29/10/2026", "dia": "Quarta", "b1_mat": "Exec. Orçamentária", "b1_top": "📝 2º Simulado completo + análise detalhada de erros", "b2_mat": "Controle Externo", "b2_top": "📝 2º Simulado completo + análise detalhada de erros", "exercicios": "30q Exec. Orç. + 30q Controle Ext."},
+            {"fase": "Fase 3: Consolidação", "semana": 11, "data": "30/10/2026", "dia": "Quinta", "b1_mat": "Gestão de Contratos", "b1_top": "📝 2º Simulado completo + análise detalhada de erros", "b2_mat": "Legislação Específica", "b2_top": "📝 2º Simulado completo + análise detalhada de erros", "exercicios": "30q Gestão + 30q Leg. Esp."},
+            {"fase": "Fase 3: Consolidação", "semana": 11, "data": "31/10/2026", "dia": "Sexta", "b1_mat": "Reforço Alta Prioridade", "b1_top": "🎯 Tópico mais fraco identificado nos simulados (Alta Prio)", "b2_mat": "Reforço Média Prioridade", "b2_top": "🎯 Tópico mais fraco identificado nos simulados (Média Prio)", "exercicios": "30q matéria escolhida"},
+            {"fase": "Fase 3: Consolidação", "semana": 11, "data": "01/11/2026", "dia": "Sábado", "b1_mat": "Reforço Alta Prioridade", "b1_top": "🎯 2º tópico mais fraco identificado nos simulados", "b2_mat": "Reforço Média Prioridade", "b2_top": "🎯 2º tópico mais fraco identificado nos simulados", "exercicios": "30q matéria escolhida"},
+            {"fase": "Fase 3: Consolidação", "semana": 12, "data": "03/11/2026", "dia": "Segunda", "b1_mat": "História MA (🟢 Baixa)", "b1_top": "França equinocial: expedição de Daniel de La Touche, fundação de São Luís, Batalha de Guaxenduba", "b2_mat": "Dir. Constitucional", "b2_top": "Revisão de consolidação", "exercicios": "30q Hist. MA + 30q Dir. Const."},
+            {"fase": "Fase 3: Consolidação", "semana": 12, "data": "04/11/2026", "dia": "Terça", "b1_mat": "História MA (🟢 Baixa)", "b1_top": "Invasão e expulsão holandesa, Estado MA e Grão-Pará, Revolta de Bequimão, Cia. de Comércio", "b2_mat": "Dir. Administrativo", "b2_top": "Revisão de consolidação", "exercicios": "30q Hist. MA + 30q Dir. Adm."},
+            {"fase": "Fase 3: Consolidação", "semana": 12, "data": "05/11/2026", "dia": "Quarta", "b1_mat": "História MA (🟢 Baixa)", "b1_top": "Império (adesão MA, Jenipapo), Balaiada, República, Revolução 1930, Vitorinismo, séc. XX", "b2_mat": "Exec. Orçamentária", "b2_top": "Revisão de consolidação", "exercicios": "30q Hist. MA + 30q Exec. Orç."},
+            {"fase": "Fase 3: Consolidação", "semana": 12, "data": "06/11/2026", "dia": "Quinta", "b1_mat": "Geografia MA (🟢 Baixa)", "b1_top": "Localização, superfície, limites, APAs, parques nacionais, clima, relevo, geologia", "b2_mat": "Gestão de Contratos", "b2_top": "Revisão de consolidação", "exercicios": "30q Geo. MA + 30q Gestão"},
+            {"fase": "Fase 3: Consolidação", "semana": 12, "data": "07/11/2026", "dia": "Sexta", "b1_mat": "Geografia MA (🟢 Baixa)", "b1_top": "Rios e bacias (Parnaíba, Gurupi, Tocantins-Araguaia), vegetação, população, urbanização", "b2_mat": "Raciocínio Lógico", "b2_top": "Revisão de consolidação", "exercicios": "30q Geo. MA + 30q Rac. Lógico"},
+            {"fase": "Fase 3: Consolidação", "semana": 12, "data": "08/11/2026", "dia": "Sábado", "b1_mat": "Geografia MA (🟢 Baixa)", "b1_top": "Agricultura, pecuária, extrativismo, parque industrial, setor terciário, malha viária, cultura", "b2_mat": "Informática", "b2_top": "Revisão de consolidação", "exercicios": "30q Geo. MA + 30q Informática"},
+            {"fase": "Fase 4: Finalização", "semana": 13, "data": "10/11/2026", "dia": "Segunda", "b1_mat": "Direitos Humanos (🟢 Baixa)", "b1_top": "Teoria geral dos direitos fundamentais, direitos humanos vs fundamentais, DUDH", "b2_mat": "Controle Externo", "b2_top": "Revisão de consolidação", "exercicios": "30q Dir. Humanos + 30q Controle Ext."},
+            {"fase": "Fase 4: Finalização", "semana": 13, "data": "11/11/2026", "dia": "Terça", "b1_mat": "Direitos Humanos (🟢 Baixa)", "b1_top": "Agenda 2030 da ONU, Estatuto da Pessoa com Deficiência (Lei 13.146/2015)", "b2_mat": "Legislação Específica", "b2_top": "Revisão de consolidação", "exercicios": "30q Dir. Humanos + 30q Leg. Esp."},
+            {"fase": "Fase 4: Finalização", "semana": 13, "data": "12/11/2026", "dia": "Quarta", "b1_mat": "Direitos Humanos (🟢 Baixa)", "b1_top": "Acessibilidade (Lei 10.098/2000), prioridade atendimento PcD (Lei 10.048/2000)", "b2_mat": "Dir. Constitucional", "b2_top": "Revisão final: pontos-chave e jurisprudência", "exercicios": "30q Dir. Humanos + 30q Dir. Const."},
+            {"fase": "Fase 4: Finalização", "semana": 13, "data": "13/11/2026", "dia": "Quinta", "b1_mat": "Direitos Humanos (🟢 Baixa)", "b1_top": "Estatuto da Igualdade Racial (Lei 12.288/2010)", "b2_mat": "Dir. Administrativo", "b2_top": "Revisão final: pontos-chave e jurisprudência", "exercicios": "30q Dir. Humanos + 30q Dir. Adm."},
+            {"fase": "Fase 4: Finalização", "semana": 13, "data": "14/11/2026", "dia": "Sexta", "b1_mat": "Hist./Geo. MA (🟢 Baixa)", "b1_top": "🔄 Revisão D+7: todos os tópicos de história do Maranhão", "b2_mat": "Exec. Orçamentária", "b2_top": "Revisão final: pontos-chave", "exercicios": "30q Hist. MA + 30q Exec. Orç."},
+            {"fase": "Fase 4: Finalização", "semana": 13, "data": "15/11/2026", "dia": "Sábado", "b1_mat": "Hist./Geo. MA (🟢 Baixa)", "b1_top": "🔄 Revisão D+7: todos os tópicos de geografia do Maranhão", "b2_mat": "Gestão de Contratos", "b2_top": "Revisão final: pontos-chave", "exercicios": "30q Geo. MA + 30q Gestão"},
+            {"fase": "Fase 4: Finalização", "semana": 14, "data": "17/11/2026", "dia": "Segunda", "b1_mat": "Direitos Humanos (🟢 Baixa)", "b1_top": "🔄 Revisão D+7: todos os tópicos de Direitos Humanos", "b2_mat": "Raciocínio Lógico", "b2_top": "Revisão final: fórmulas e pontos-chave", "exercicios": "30q Dir. Humanos + 30q Rac. Lógico"},
+            {"fase": "Fase 4: Finalização", "semana": 14, "data": "18/11/2026", "dia": "Terça", "b1_mat": "Hist./Geo. MA (🟢 Baixa)", "b1_top": "Revisão complementar: fatos séc. XX + malha viária/portos/aeroportos/cultura", "b2_mat": "Informática", "b2_top": "Revisão final: pontos-chave", "exercicios": "30q Hist./Geo. + 30q Informática"},
+            {"fase": "Fase 4: Finalização", "semana": 14, "data": "19/11/2026", "dia": "Quarta", "b1_mat": "Simulado Geral", "b1_top": "📝 50 questões mistas (todas as matérias, estilo Cebraspe)", "b2_mat": "Análise de Erros", "b2_top": "Análise de erros + reforço direcionado nos pontos fracos", "exercicios": "30q mistas"},
+            {"fase": "Fase 4: Finalização", "semana": 14, "data": "20/11/2026", "dia": "Quinta", "b1_mat": "Simulado Geral", "b1_top": "📝 50 questões mistas (todas as matérias, estilo Cebraspe)", "b2_mat": "Análise de Erros", "b2_top": "Análise de erros + reforço direcionado nos pontos fracos", "exercicios": "30q mistas"},
+            {"fase": "Fase 4: Finalização", "semana": 14, "data": "21/11/2026", "dia": "Sexta", "b1_mat": "Dir. Const. + Dir. Adm.", "b1_top": "Revisão relâmpago (mapas mentais e resumos)", "b2_mat": "Exec. Orç. + Gestão", "b2_top": "Revisão relâmpago (mapas mentais e resumos)", "exercicios": "30q mistas"},
+            {"fase": "Fase 4: Finalização", "semana": 14, "data": "22/11/2026", "dia": "Sábado", "b1_mat": "Controle Ext. + Leg. Esp.", "b1_top": "Revisão relâmpago (mapas mentais e resumos)", "b2_mat": "Informática + Rac. Lógico", "b2_top": "Revisão relâmpago (mapas mentais e resumos)", "exercicios": "30q mistas"},
+            {"fase": "Fase 5: Revisão Geral", "semana": 15, "data": "23/11/2026", "dia": "Segunda", "b1_mat": "Dir. Constitucional", "b1_top": "⚡ Revisão intensiva: resumos + flashcards + pontos-chave", "b2_mat": "Dir. Administrativo", "b2_top": "⚡ Revisão intensiva: resumos + flashcards + pontos-chave", "exercicios": "30q Dir. Const. + 30q Dir. Adm."},
+            {"fase": "Fase 5: Revisão Geral", "semana": 15, "data": "24/11/2026", "dia": "Terça", "b1_mat": "Exec. Orçamentária", "b1_top": "⚡ Revisão intensiva: resumos + flashcards + pontos-chave", "b2_mat": "Gestão de Contratos", "b2_top": "⚡ Revisão intensiva: resumos + flashcards + pontos-chave", "exercicios": "30q Exec. Orç. + 30q Gestão"},
+            {"fase": "Fase 5: Revisão Geral", "semana": 15, "data": "25/11/2026", "dia": "Quarta", "b1_mat": "Raciocínio Lógico", "b1_top": "⚡ Revisão intensiva: fórmulas, macetes + exercícios rápidos", "b2_mat": "Informática", "b2_top": "⚡ Revisão intensiva: resumos + flashcards + pontos-chave", "exercicios": "30q Rac. Lógico + 30q Informática"},
+            {"fase": "Fase 5: Revisão Geral", "semana": 15, "data": "26/11/2026", "dia": "Quinta", "b1_mat": "Controle Ext. + Leg. Esp.", "b1_top": "⚡ Revisão intensiva condensada", "b2_mat": "Hist./Geo. MA + Dir. Hum.", "b2_top": "⚡ Revisão intensiva condensada", "exercicios": "30q por matéria"},
+            {"fase": "Fase 5: Revisão Geral", "semana": 15, "data": "27/11/2026", "dia": "Sexta", "b1_mat": "SIMULADO FINAL", "b1_top": "📝 SIMULADO FINAL: 100 questões padrão Cebraspe (tempo cronometrado)", "b2_mat": "Análise do Simulado", "b2_top": "Revisão dos erros do Simulado Final", "exercicios": "100q Simulado Final"},
+            {"fase": "Fase 5: Revisão Geral", "semana": 15, "data": "28/11/2026", "dia": "Sábado", "b1_mat": "Revisão Leve", "b1_top": "☀️ Apenas releitura de resumos e mapas mentais", "b2_mat": "Descanso", "b2_top": "🧘 Descanso e preparação mental para a prova de 29/11", "exercicios": "Descanso mental"}
+        ];
+
+        const revData = [
+            {"id": "c1", "prio": "alta", "disc": "Dir. Constitucional", "topico": "CF/88: conceito, classificações, princípios, emendas", "estudo": "18/08/2026", "d1": "19/08/2026", "d7": "25/08/2026", "d30": "17/09/2026"},
+            {"id": "c2", "prio": "alta", "disc": "Dir. Constitucional", "topico": "Direitos e garantias fundamentais: individuais e coletivos", "estudo": "20/08/2026", "d1": "21/08/2026", "d7": "27/08/2026", "d30": "19/09/2026"},
+            {"id": "c3", "prio": "alta", "disc": "Dir. Constitucional", "topico": "Direitos sociais, nacionalidade, cidadania, políticos, partidos", "estudo": "25/08/2026", "d1": "26/08/2026", "d7": "01/09/2026", "d30": "24/09/2026"},
+            {"id": "c4", "prio": "alta", "disc": "Dir. Constitucional", "topico": "Organização político-administrativa: União, estados, DF, municípios", "estudo": "27/08/2026", "d1": "28/08/2026", "d7": "03/09/2026", "d30": "26/09/2026"},
+            {"id": "c5", "prio": "alta", "disc": "Dir. Constitucional", "topico": "Administração pública: disposições gerais e servidores", "estudo": "01/09/2026", "d1": "02/09/2026", "d7": "08/09/2026", "d30": "01/10/2026"},
+            {"id": "c6", "prio": "alta", "disc": "Dir. Constitucional", "topico": "Poder Legislativo: Congresso, processo legislativo, fiscalização, CPIs", "estudo": "03/09/2026", "d1": "04/09/2026", "d7": "10/09/2026", "d30": "03/10/2026"},
+            {"id": "c7", "prio": "alta", "disc": "Dir. Constitucional", "topico": "Poder Executivo: atribuições do PR e dos ministros de Estado", "estudo": "08/09/2026", "d1": "09/09/2026", "d7": "15/09/2026", "d30": "08/10/2026"},
+            {"id": "c8", "prio": "alta", "disc": "Dir. Constitucional", "topico": "Poder Judiciário: órgãos, competências, CNJ", "estudo": "10/09/2026", "d1": "11/09/2026", "d7": "17/09/2026", "d30": "10/10/2026"},
+            {"id": "c9", "prio": "alta", "disc": "Dir. Constitucional", "topico": "Funções essenciais à Justiça: MP, advocacia pública, defensoria", "estudo": "15/09/2026", "d1": "16/09/2026", "d7": "22/09/2026", "d30": "15/10/2026"},
+            {"id": "c10", "prio": "alta", "disc": "Dir. Constitucional", "topico": "Artigos 23, 170, 225 e 231 da CF/88", "estudo": "17/09/2026", "d1": "18/09/2026", "d7": "24/09/2026", "d30": "17/10/2026"},
+            {"id": "a1", "prio": "alta", "disc": "Dir. Administrativo", "topico": "Organização administrativa: centralização, descentralização, adm direta/indireta", "estudo": "19/08/2026", "d1": "20/08/2026", "d7": "26/08/2026", "d30": "18/09/2026"},
+            {"id": "a2", "prio": "alta", "disc": "Dir. Administrativo", "topico": "Ato administrativo: conceito, requisitos, atributos, classificação, espécies", "estudo": "21/08/2026", "d1": "22/08/2026", "d7": "28/08/2026", "d30": "20/09/2026"},
+            {"id": "a3", "prio": "alta", "disc": "Dir. Administrativo", "topico": "Agentes públicos: conceito, espécies, cargo/emprego/função pública", "estudo": "26/08/2026", "d1": "27/08/2026", "d7": "02/09/2026", "d30": "25/09/2026"},
+            {"id": "a4", "prio": "alta", "disc": "Dir. Administrativo", "topico": "Poderes administrativos: hierárquico, disciplinar, regulamentar, de polícia", "estudo": "28/08/2026", "d1": "29/08/2026", "d7": "04/09/2026", "d30": "27/09/2026"},
+            {"id": "a5", "prio": "alta", "disc": "Dir. Administrativo", "topico": "Licitação: princípios, dispensa, inexigibilidade, modalidades, procedimentos", "estudo": "02/09/2026", "d1": "03/09/2026", "d7": "09/09/2026", "d30": "02/10/2026"},
+            {"id": "a6", "prio": "alta", "disc": "Dir. Administrativo", "topico": "Controle da administração pública: controle administrativo, judicial e legislativo", "estudo": "04/09/2026", "d1": "05/09/2026", "d7": "11/09/2026", "d30": "04/10/2026"},
+            {"id": "a7", "prio": "alta", "disc": "Dir. Administrativo", "topico": "Responsabilidade civil do Estado: ato comissivo, omissão, requisitos, excludentes", "estudo": "09/09/2026", "d1": "10/09/2026", "d7": "16/09/2026", "d30": "09/10/2026"},
+            {"id": "g1", "prio": "alta", "disc": "Gestão de Contratos", "topico": "Lei nº 14.133/2021: visão geral, princípios, modalidades aplicáveis", "estudo": "22/08/2026", "d1": "23/08/2026", "d7": "29/08/2026", "d30": "21/09/2026"},
+            {"id": "g2", "prio": "alta", "disc": "Gestão de Contratos", "topico": "Elaboração e fiscalização: cláusulas, indicadores, fiscalizador e preposto", "estudo": "29/08/2026", "d1": "30/08/2026", "d7": "05/09/2026", "d30": "28/09/2026"},
+            {"id": "g3", "prio": "alta", "disc": "Gestão de Contratos", "topico": "Acompanhamento da execução, irregularidades, penalidades e sanções", "estudo": "05/09/2026", "d1": "06/09/2026", "d7": "12/09/2026", "d30": "05/10/2026"},
+            {"id": "e1", "prio": "alta", "disc": "Exec. Orçamentária", "topico": "Programação e execução: empenho, liquidação, pagamento da despesa", "estudo": "23/08/2026", "d1": "25/08/2026", "d7": "30/08/2026", "d30": "22/09/2026"},
+            {"id": "e2", "prio": "alta", "disc": "Exec. Orçamentária", "topico": "GRU, sistemas de informações, restos a pagar e DEA", "estudo": "30/08/2026", "d1": "01/09/2026", "d7": "06/09/2026", "d30": "29/09/2026"},
+            {"id": "e3", "prio": "alta", "disc": "Exec. Orçamentária", "topico": "Suprimento de fundos, conformidade diária e documental, rol responsáveis", "estudo": "06/09/2026", "d1": "08/09/2026", "d7": "13/09/2026", "d30": "06/10/2026"},
+            {"id": "e4", "prio": "alta", "disc": "Exec. Orçamentária", "topico": "Retenção e recolhimento de tributos incidentes sobre bens e serviços", "estudo": "13/09/2026", "d1": "15/09/2026", "d7": "20/09/2026", "d30": "13/10/2026"},
+            {"id": "e5", "prio": "alta", "disc": "Exec. Orçamentária", "topico": "SIAFI e CPR (contas a pagar e a receber)", "estudo": "16/09/2026", "d1": "17/09/2026", "d7": "23/09/2026", "d30": "16/10/2026"},
+            {"id": "e6", "prio": "alta", "disc": "Exec. Orçamentária", "topico": "MCASP 11ª Edição (estrutura, demonstrações e mudanças)", "estudo": "18/09/2026", "d1": "19/09/2026", "d7": "25/09/2026", "d30": "18/10/2026"},
+            {"id": "e7", "prio": "alta", "disc": "Exec. Orçamentária", "topico": "Lei de Responsabilidade Fiscal (LC nº 101/2000 e alterações)", "estudo": "20/09/2026", "d1": "22/09/2026", "d7": "27/09/2026", "d30": "20/10/2026"},
+            {"id": "i1", "prio": "media", "disc": "Informática", "topico": "Competências digitais: cultura, cidadania, letramento, Lei 14.533/2023", "estudo": "19/08/2026", "d1": "20/08/2026", "d7": "26/08/2026", "d30": "18/09/2026"},
+            {"id": "i2", "prio": "media", "disc": "Informática", "topico": "SO Windows, MS Office (Word, Excel, PowerPoint)", "estudo": "21/08/2026", "d1": "22/08/2026", "d7": "28/08/2026", "d30": "20/09/2026"},
+            {"id": "i3", "prio": "media", "disc": "Informática", "topico": "Redes: LAN, WAN, protocolos (TCP/IP, HTTP, etc.), interoperabilidade", "estudo": "26/08/2026", "d1": "27/08/2026", "d7": "02/09/2026", "d30": "25/09/2026"},
+            {"id": "i4", "prio": "media", "disc": "Informática", "topico": "Ferramentas de comunicação/colaboração: e-mail, Teams, Meet, trabalho remoto", "estudo": "28/08/2026", "d1": "29/08/2026", "d7": "04/09/2026", "d30": "27/09/2026"},
+            {"id": "i5", "prio": "media", "disc": "Informática", "topico": "Segurança da informação: backup, vírus, antivírus, firewall, phishing", "estudo": "02/09/2026", "d1": "03/09/2026", "d7": "09/09/2026", "d30": "02/10/2026"},
+            {"id": "i6", "prio": "media", "disc": "Informática", "topico": "LGPD (Lei nº 13.709/2018): direitos, princípios e setor público", "estudo": "04/09/2026", "d1": "05/09/2026", "d7": "11/09/2026", "d30": "04/10/2026"},
+            {"id": "i7", "prio": "media", "disc": "Informática", "topico": "Nuvem (OneDrive, Drive), assinatura digital, Marco Civil (Lei 12.965)", "estudo": "09/09/2026", "d1": "10/09/2026", "d7": "16/09/2026", "d30": "09/10/2026"},
+            {"id": "i8", "prio": "media", "disc": "Informática", "topico": "Gov.br, Portal de Dados Abertos, LAI (Lei nº 12.527/2011)", "estudo": "11/09/2026", "d1": "12/09/2026", "d7": "18/09/2026", "d30": "11/10/2026"},
+            {"id": "i9", "prio": "media", "disc": "Informática", "topico": "Processo Eletrônico Nacional (PEN), SEI, assinatura eletrônica", "estudo": "16/09/2026", "d1": "17/09/2026", "d7": "23/09/2026", "d30": "16/10/2026"},
+            {"id": "i10", "prio": "media", "disc": "Informática", "topico": "Tecnologias emergentes (IA, big data, IoT), ética e combate à desinformação", "estudo": "18/09/2026", "d1": "19/09/2026", "d7": "25/09/2026", "d30": "18/10/2026"},
+            {"id": "r1", "prio": "media", "disc": "Raciocínio Lógico", "topico": "Estruturas lógicas, proposições simples e compostas", "estudo": "18/08/2026", "d1": "19/08/2026", "d7": "25/08/2026", "d30": "17/09/2026"},
+            {"id": "r2", "prio": "media", "disc": "Raciocínio Lógico", "topico": "Tabelas-verdade, equivalências, Leis de Morgan", "estudo": "20/08/2026", "d1": "21/08/2026", "d7": "27/08/2026", "d30": "19/09/2026"},
+            {"id": "r3", "prio": "media", "disc": "Raciocínio Lógico", "topico": "Lógica de argumentação: analogias, inferências, deduções e conclusões", "estudo": "25/08/2026", "d1": "26/08/2026", "d7": "01/09/2026", "d30": "24/09/2026"},
+            {"id": "r4", "prio": "media", "disc": "Raciocínio Lógico", "topico": "Diagramas lógicos e lógica de primeira ordem", "estudo": "27/08/2026", "d1": "28/08/2026", "d7": "03/09/2026", "d30": "26/09/2026"},
+            {"id": "r5", "prio": "media", "disc": "Raciocínio Lógico", "topico": "Princípios de contagem e probabilidade", "estudo": "01/09/2026", "d1": "02/09/2026", "d7": "08/09/2026", "d30": "01/10/2026"},
+            {"id": "r6", "prio": "media", "disc": "Raciocínio Lógico", "topico": "Operações com conjuntos", "estudo": "03/09/2026", "d1": "04/09/2026", "d7": "10/09/2026", "d30": "03/10/2026"},
+            {"id": "r7", "prio": "media", "disc": "Raciocínio Lógico", "topico": "Problemas aritméticos, geométricos e matriciais", "estudo": "08/09/2026", "d1": "09/09/2026", "d7": "15/09/2026", "d30": "08/10/2026"},
+            {"id": "ce1", "prio": "media", "disc": "Controle Externo", "topico": "Conceito, tipos e formas de controle; controle interno e externo", "estudo": "22/08/2026", "d1": "23/08/2026", "d7": "29/08/2026", "d30": "21/09/2026"},
+            {"id": "ce2", "prio": "media", "disc": "Controle Externo", "topico": "Controle parlamentar e controle pelos tribunais de contas", "estudo": "29/08/2026", "d1": "30/08/2026", "d7": "05/09/2026", "d30": "28/09/2026"},
+            {"id": "ce3", "prio": "media", "disc": "Controle Externo", "topico": "Controle administrativo e Lei de Improbidade Administrativa (8.429/1992)", "estudo": "05/09/2026", "d1": "06/09/2026", "d7": "12/09/2026", "d30": "05/10/2026"},
+            {"id": "ce4", "prio": "media", "disc": "Controle Externo", "topico": "Controle jurisdicional da adm. pública no direito brasileiro", "estudo": "15/09/2026", "d1": "16/09/2026", "d7": "22/09/2026", "d30": "15/10/2026"},
+            {"id": "ce5", "prio": "media", "disc": "Controle Externo", "topico": "Controle da atividade financeira do Estado: espécies e sistemas", "estudo": "19/09/2026", "d1": "20/09/2026", "d7": "26/09/2026", "d30": "19/10/2026"},
+            {"id": "ce6", "prio": "media", "disc": "Controle Externo", "topico": "TCU, tribunais de contas estaduais e TCE-MA na Constituição Estadual", "estudo": "22/09/2026", "d1": "23/09/2026", "d7": "29/09/2026", "d30": "22/10/2026"},
+            {"id": "l1", "prio": "media", "disc": "Legislação Específica", "topico": "Regimento Interno do TCE/MA (estrutura e competências)", "estudo": "23/08/2026", "d1": "25/08/2026", "d7": "30/08/2026", "d30": "22/09/2026"},
+            {"id": "l2", "prio": "media", "disc": "Legislação Específica", "topico": "Lei nº 8.258/2005 (Lei Orgânica do TCE/MA)", "estudo": "30/08/2026", "d1": "01/09/2026", "d7": "06/09/2026", "d30": "29/09/2026"},
+            {"id": "l3", "prio": "media", "disc": "Legislação Específica", "topico": "Lei nº 9.936/2013 (Organização administrativa do TCE/MA)", "estudo": "06/09/2026", "d1": "08/09/2026", "d7": "13/09/2026", "d30": "06/10/2026"},
+            {"id": "l4", "prio": "media", "disc": "Legislação Específica", "topico": "IN nº 50/2017 e alterações + IN nº 82/2025", "estudo": "13/09/2026", "d1": "15/09/2026", "d7": "20/09/2026", "d30": "13/10/2026"},
+            {"id": "h1", "prio": "baixa", "disc": "História do MA", "topico": "França equinocial, fundação de São Luís, Batalha de Guaxenduba", "estudo": "03/11/2026", "d1": "04/11/2026", "d7": "10/11/2026", "d30": null},
+            {"id": "h2", "prio": "baixa", "disc": "História do MA", "topico": "Invasão holandesa, Estado MA e Grão-Pará, Revolta de Bequimão", "estudo": "04/11/2026", "d1": "05/11/2026", "d7": "11/11/2026", "d30": null},
+            {"id": "h3", "prio": "baixa", "disc": "História do MA", "topico": "Império, Balaiada, República, Revolução 1930, Vitorinismo, séc. XX", "estudo": "05/11/2026", "d1": "06/11/2026", "d7": "12/11/2026", "d30": null},
+            {"id": "hg1", "prio": "baixa", "disc": "Geografia do MA", "topico": "Localização, limites, APAs, parques nacionais, clima, relevo", "estudo": "06/11/2026", "d1": "07/11/2026", "d7": "13/11/2026", "d30": null},
+            {"id": "hg2", "prio": "baixa", "disc": "Geografia do MA", "topico": "Rios e bacias, formações vegetais, população, urbanização", "estudo": "07/11/2026", "d1": "08/11/2026", "d7": "14/11/2026", "d30": null},
+            {"id": "hg3", "prio": "baixa", "disc": "Geografia do MA", "topico": "Agricultura, extrativismo, indústria, transporte, cultura", "estudo": "08/11/2026", "d1": "10/11/2026", "d7": "15/11/2026", "d30": null},
+            {"id": "dh1", "prio": "baixa", "disc": "Direitos Humanos", "topico": "Teoria geral dos direitos fundamentais, DUDH", "estudo": "10/11/2026", "d1": "11/11/2026", "d7": "17/11/2026", "d30": null},
+            {"id": "dh2", "prio": "baixa", "disc": "Direitos Humanos", "topico": "Agenda 2030 da ONU, Estatuto PcD (Lei 13.146/2015)", "estudo": "11/11/2026", "d1": "12/11/2026", "d7": "18/11/2026", "d30": null},
+            {"id": "dh3", "prio": "baixa", "disc": "Direitos Humanos", "topico": "Acessibilidade (Lei 10.098/2000) e Prioridade PcD (Lei 10.048/2000)", "estudo": "12/11/2026", "d1": "13/11/2026", "d7": "19/11/2026", "d30": null},
+            {"id": "dh4", "prio": "baixa", "disc": "Direitos Humanos", "topico": "Estatuto da Igualdade Racial (Lei nº 12.288/2010)", "estudo": "13/11/2026", "d1": "14/11/2026", "d7": "20/11/2026", "d30": null}
+        ];
+
+        const STORAGE_KEY = "TCE_MA_STUDY_TRACKER_V1";
+        const THEME_KEY = "TCE_MA_THEME_V1";
+        const CLOUD_PIN_KEY = "TCE_MA_CLOUD_PIN_V1";
+
+        let state = {
+            days: {},
+            reviews: {},
+            notes: {},
+            questionsDone: {}
+        };
+
+        let cloudSyncTimeout = null;
+
+        /* ==========================================================================
+           TEMA CLARO / ESCURO (LIGHT / DARK THEME)
+           ========================================================================== */
+        function initTheme() {
+            const savedTheme = localStorage.getItem(THEME_KEY) || "light";
+            setTheme(savedTheme);
+        }
+
+        function setTheme(theme) {
+            document.documentElement.setAttribute("data-theme", theme);
+            localStorage.setItem(THEME_KEY, theme);
+            const themeIcon = document.getElementById("themeIcon");
+            const themeText = document.getElementById("themeText");
+            if (theme === "dark") {
+                themeIcon.innerText = "☀️";
+                themeText.innerText = "Modo Claro";
+            } else {
+                themeIcon.innerText = "🌙";
+                themeText.innerText = "Modo Escuro";
+            }
+        }
+
+        function toggleTheme() {
+            const current = document.documentElement.getAttribute("data-theme") || "light";
+            setTheme(current === "dark" ? "light" : "dark");
+        }
+
+        /* ==========================================================================
+           SINCRONIZAÇÃO EM NUVEM (VERCEL KV + FALLBACK LOCALSTORAGE)
+           ========================================================================== */
+        function getCloudPin() {
+            return localStorage.getItem(CLOUD_PIN_KEY) || "";
+        }
+
+        function updateCloudBadge(status, text) {
+            const badge = document.getElementById("cloudBadge");
+            const icon = document.getElementById("cloudIcon");
+            const label = document.getElementById("cloudStatusText");
+
+            badge.className = "cloud-badge";
+            if (status === "connected") {
+                badge.classList.add("connected");
+                icon.innerText = "🟢";
+                label.innerText = text || "Nuvem Sincronizada";
+            } else if (status === "syncing") {
+                badge.classList.add("syncing");
+                icon.innerText = "🔄";
+                label.innerText = text || "Sincronizando...";
+            } else {
+                icon.innerText = "☁️";
+                label.innerText = text || "Conectar Nuvem";
+            }
+        }
+
+        async function fetchCloudState() {
+            const pin = getCloudPin();
+            if (!pin) {
+                updateCloudBadge("offline", "Conectar Nuvem");
+                return;
+            }
+
+            try {
+                updateCloudBadge("syncing", "Buscando nuvem...");
+                const res = await fetch(`/api/progresso?pin=${encodeURIComponent(pin)}`);
+                if (!res.ok) throw new Error("Erro de rede");
+                const result = await res.json();
+
+                if (result.success && result.data) {
+                    state = result.data;
+                    localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+                    updateMetrics();
+                    renderSchedule();
+                    renderRevisoes();
+                    updateCloudBadge("connected", "Nuvem Conectada");
+                    showToast("☁️ Dados carregados da nuvem Vercel!");
+                } else if (result.kv_configured === false) {
+                    updateCloudBadge("offline", "Vercel KV Pendente");
+                } else {
+                    updateCloudBadge("connected", "Nuvem Pronta");
+                }
+            } catch (e) {
+                console.log("Executando em modo local / offline:", e.message);
+                updateCloudBadge("offline", "Modo Local");
+            }
+        }
+
+        function scheduleCloudSave() {
+            const pin = getCloudPin();
+            if (!pin) return;
+
+            clearTimeout(cloudSyncTimeout);
+            updateCloudBadge("syncing", "Salvando na nuvem...");
+
+            cloudSyncTimeout = setTimeout(async () => {
+                try {
+                    const res = await fetch("/api/progresso", {
+                        method: "POST",
+                        headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify({ pin, data: state })
+                    });
+                    const result = await res.json();
+                    if (result.success) {
+                        updateCloudBadge("connected", "Nuvem Atualizada");
+                    } else {
+                        updateCloudBadge("offline", "Modo Local");
+                    }
+                } catch (err) {
+                    updateCloudBadge("offline", "Modo Local");
+                }
+            }, 800);
+        }
+
+        function openCloudModal() {
+            const pin = getCloudPin();
+            document.getElementById("cloudPinInput").value = pin;
+            document.getElementById("cloudModal").classList.add("show");
+        }
+
+        function closeCloudModal() {
+            document.getElementById("cloudModal").classList.remove("show");
+        }
+
+        async function saveCloudPinAndSync() {
+            const pinVal = document.getElementById("cloudPinInput").value.trim();
+            if (!pinVal) {
+                alert("Por favor, digite um PIN ou chave pessoal (ex: meu-pin-1234).");
+                return;
+            }
+            localStorage.setItem(CLOUD_PIN_KEY, pinVal);
+            closeCloudModal();
+            showToast("☁️ PIN da nuvem salvo!");
+            await fetchCloudState();
+            scheduleCloudSave();
+        }
+
+        /* ==========================================================================
+           PERSISTÊNCIA DE DADOS (LOCALSTORAGE)
+           ========================================================================== */
+        function loadState() {
+            const saved = localStorage.getItem(STORAGE_KEY);
+            if (saved) {
+                try {
+                    state = JSON.parse(saved);
+                } catch(e) {
+                    console.error("Erro ao carregar dados salvos:", e);
+                }
+            }
+        }
+
+        function saveState() {
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+            updateMetrics();
+            scheduleCloudSave();
+            showToast("💾 Progresso salvo!");
+        }
+
+        function showToast(msg) {
+            const toast = document.getElementById("toast");
+            toast.innerText = msg;
+            toast.classList.add("show");
+            setTimeout(() => toast.classList.remove("show"), 2600);
+        }
+
+        /* ==========================================================================
+           NAVEGAÇÃO POR ABAS
+           ========================================================================== */
+        function switchTab(tabId) {
+            document.querySelectorAll(".tab-pane").forEach(p => p.classList.remove("active"));
+            document.querySelectorAll(".tab-btn").forEach(b => b.classList.remove("active"));
+            
+            document.getElementById("tab-" + tabId).classList.add("active");
+            event.currentTarget.classList.add("active");
+        }
+
+        /* ==========================================================================
+           MÉTRICAS & INDICADORES (KPIS)
+           ========================================================================== */
+        function updateMetrics() {
+            // Contagem regressiva
+            const examDate = new Date("2026-11-29T08:00:00");
+            const now = new Date();
+            const diffTime = examDate - now;
+            const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+            document.getElementById("countdownVal").innerText = (diffDays > 0 ? diffDays : 0) + " dias";
+
+            // Dias concluídos (B1 e B2)
+            let completedDays = 0;
+            let totalDays = daysData.length;
+            daysData.forEach((d, idx) => {
+                const b1 = state.days[`day_${idx}_b1`];
+                const b2 = state.days[`day_${idx}_b2`];
+                if (b1 && b2) completedDays++;
+            });
+            document.getElementById("daysDoneVal").innerHTML = `${completedDays} <span class="stat-value-sub">/ ${totalDays} dias</span>`;
+            const pctDays = Math.round((completedDays / totalDays) * 100);
+            document.getElementById("daysProgressFill").style.width = pctDays + "%";
+
+            // Revisões concluídas
+            let totalRevs = 0;
+            let doneRevs = 0;
+            revData.forEach(r => {
+                totalRevs++; // D+1
+                if (state.reviews[`${r.id}_d1`]) doneRevs++;
+                
+                totalRevs++; // D+7
+                if (state.reviews[`${r.id}_d7`]) doneRevs++;
+
+                if (r.d30) {
+                    totalRevs++; // D+30
+                    if (state.reviews[`${r.id}_d30`]) doneRevs++;
+                }
+            });
+            const pctRevs = totalRevs > 0 ? Math.round((doneRevs / totalRevs) * 100) : 0;
+            document.getElementById("revsDoneVal").innerText = pctRevs + "%";
+            document.getElementById("revsProgressFill").style.width = pctRevs + "%";
+
+            // Total de questões resolvidas
+            let totalQuestions = 0;
+            Object.values(state.questionsDone).forEach(q => {
+                totalQuestions += parseInt(q || 0, 10);
+            });
+            document.getElementById("questionsDoneVal").innerHTML = `${totalQuestions.toLocaleString('pt-BR')} <span class="stat-value-sub">/ ~5.400</span>`;
+        }
+
+        /* ==========================================================================
+           AÇÕES DO CRONOGRAMA DIÁRIO
+           ========================================================================== */
+        function toggleDayBlock(dayIdx, blockKey) {
+            const key = `day_${dayIdx}_${blockKey}`;
+            state.days[key] = !state.days[key];
+            saveState();
+            renderSchedule();
+        }
+
+        function toggleExercise(dayIdx) {
+            const key = `day_${dayIdx}_ex`;
+            state.days[key] = !state.days[key];
+            if (state.days[key] && !state.questionsDone[`day_${dayIdx}`]) {
+                state.questionsDone[`day_${dayIdx}`] = 60;
+            }
+            saveState();
+            renderSchedule();
+        }
+
+        function updateQuestionsCount(dayIdx, val) {
+            state.questionsDone[`day_${dayIdx}`] = parseInt(val || 0, 10);
+            saveState();
+        }
+
+        function updateNote(dayIdx, val) {
+            state.notes[`day_${dayIdx}`] = val;
+            saveState();
+        }
+
+        function toggleReview(revId, cycleKey) {
+            const key = `${revId}_${cycleKey}`;
+            state.reviews[key] = !state.reviews[key];
+            saveState();
+            renderRevisoes();
+        }
+
+        /* ==========================================================================
+           RENDERIZAÇÃO DO CRONOGRAMA
+           ========================================================================== */
+        function renderSchedule() {
+            const weekVal = document.getElementById("weekFilter").value;
+            const statusVal = document.getElementById("statusFilter").value;
+            const searchVal = (document.getElementById("scheduleSearch") ? document.getElementById("scheduleSearch").value : "").toLowerCase().trim();
+            const container = document.getElementById("scheduleList");
+            container.innerHTML = "";
+
+            let renderedCount = 0;
+
+            daysData.forEach((d, idx) => {
+                if (weekVal !== "all" && parseInt(weekVal, 10) !== d.semana) return;
+
+                const b1Done = !!state.days[`day_${idx}_b1`];
+                const b2Done = !!state.days[`day_${idx}_b2`];
+                const exDone = !!state.days[`day_${idx}_ex`];
+                const isDayDone = b1Done && b2Done;
+
+                if (statusVal === "completed" && !isDayDone) return;
+                if (statusVal === "pending" && isDayDone) return;
+
+                if (searchVal) {
+                    const matchText = `${d.dia} ${d.data} ${d.fase} ${d.b1_mat} ${d.b1_top} ${d.b2_mat} ${d.b2_top} ${d.exercicios}`.toLowerCase();
+                    if (!matchText.includes(searchVal)) return;
+                }
+
+                renderedCount++;
+                const noteVal = state.notes[`day_${idx}`] || "";
+                const qDoneVal = state.questionsDone[`day_${idx}`] || "";
+
+                const card = document.createElement("div");
+                card.className = `day-card ${isDayDone ? 'completed' : ''}`;
+                card.innerHTML = `
+                    <div class="day-header">
+                        <div class="day-meta">
+                            <span class="day-badge">Semana ${d.semana} • ${d.dia}</span>
+                            <span class="day-date">📅 ${d.data}</span>
+                            <span class="day-phase">${d.fase}</span>
+                        </div>
+                        <div>
+                            ${isDayDone 
+                                ? '<span class="day-status-pill done">✅ Dia Concluído</span>' 
+                                : '<span class="day-status-pill pending">⏳ Pendente</span>'}
+                        </div>
+                    </div>
+                    <div class="day-body">
+                        <div class="block-card">
+                            <div class="block-header">
+                                <span class="block-tag">Bloco 1 (2 Horas)</span>
+                                <span class="prio-pill ${d.b1_mat.includes('Baixa') ? 'prio-baixa' : 'prio-alta'}">
+                                    ${d.b1_mat.includes('Baixa') ? 'Baixa Prioridade' : 'Alta Prioridade'}
+                                </span>
+                            </div>
+                            <div>
+                                <div class="block-subj">${d.b1_mat}</div>
+                                <div class="block-content" style="margin-top: 6px;">${d.b1_top}</div>
+                            </div>
+                            <label class="custom-checkbox-container" style="margin-top: 10px;">
+                                <input type="checkbox" ${b1Done ? 'checked' : ''} onchange="toggleDayBlock(${idx}, 'b1')">
+                                <span class="checkmark"></span>
+                                <span>${b1Done ? 'Estudo Concluído (2h)' : 'Concluir Estudo (2h)'}</span>
+                            </label>
+                        </div>
+
+                        <div class="block-card">
+                            <div class="block-header">
+                                <span class="block-tag">Bloco 2 (2 Horas)</span>
+                                <span class="prio-pill ${d.b2_mat.includes('Baixa') ? 'prio-baixa' : (d.b2_mat.includes('Alta') ? 'prio-alta' : 'prio-media')}">
+                                    ${d.b2_mat.includes('Baixa') ? 'Baixa Prioridade' : (d.b2_mat.includes('Alta') ? 'Alta Prioridade' : 'Média Prioridade')}
+                                </span>
+                            </div>
+                            <div>
+                                <div class="block-subj">${d.b2_mat}</div>
+                                <div class="block-content" style="margin-top: 6px;">${d.b2_top}</div>
+                            </div>
+                            <label class="custom-checkbox-container" style="margin-top: 10px;">
+                                <input type="checkbox" ${b2Done ? 'checked' : ''} onchange="toggleDayBlock(${idx}, 'b2')">
+                                <span class="checkmark"></span>
+                                <span>${b2Done ? 'Estudo Concluído (2h)' : 'Concluir Estudo (2h)'}</span>
+                            </label>
+                        </div>
+                    </div>
+                    <div class="day-footer">
+                        <div class="exercise-info">
+                            <span class="exercise-badge">🎯 Exercícios</span>
+                            <span>${d.exercicios}</span>
+                        </div>
+                        <div style="display: flex; align-items: center; gap: 12px;">
+                            <label class="custom-checkbox-container" style="margin: 0">
+                                <input type="checkbox" ${exDone ? 'checked' : ''} onchange="toggleExercise(${idx})">
+                                <span class="checkmark"></span>
+                                <span>Questões Realizadas</span>
+                            </label>
+                            <input type="number" placeholder="Qtd" value="${qDoneVal}" style="width: 75px; padding: 5px 8px; font-size: 0.82rem;" onchange="updateQuestionsCount(${idx}, this.value)">
+                        </div>
+                    </div>
+                    <div class="note-container">
+                        <input type="text" class="note-input" placeholder="💬 Anotações / Dúvidas sobre o estudo deste dia..." value="${noteVal}" onchange="updateNote(${idx}, this.value)">
+                    </div>
+                `;
+                container.appendChild(card);
+            });
+
+            if (renderedCount === 0) {
+                container.innerHTML = `
+                    <div style="background: var(--c-surface); border: 1px solid var(--c-border); border-radius: var(--r-card); padding: 40px 20px; text-align: center; color: var(--c-text-muted);">
+                        <p style="font-size: 1.1rem; font-weight: 600; margin-bottom: 6px;">Nenhum dia encontrado para os filtros selecionados.</p>
+                        <p style="font-size: 0.85rem;">Tente ajustar os filtros ou limpar o termo de busca.</p>
+                    </div>
+                `;
+            }
+        }
+
+        /* ==========================================================================
+           RENDERIZAÇÃO DE REVISÕES ESPAÇADAS
+           ========================================================================== */
+        function renderRevisoes() {
+            const prioVal = document.getElementById("revPrioFilter").value;
+            const discVal = document.getElementById("revDiscFilter").value;
+            const searchVal = (document.getElementById("revSearch") ? document.getElementById("revSearch").value : "").toLowerCase().trim();
+            const tbody = document.getElementById("revisoesTableBody");
+            tbody.innerHTML = "";
+
+            let renderedCount = 0;
+
+            revData.forEach(r => {
+                if (prioVal !== "all" && r.prio !== prioVal) return;
+                if (discVal !== "all" && r.disc !== discVal) return;
+
+                if (searchVal) {
+                    const matchText = `${r.disc} ${r.topico} ${r.estudo}`.toLowerCase();
+                    if (!matchText.includes(searchVal)) return;
+                }
+
+                renderedCount++;
+                const d1Done = !!state.reviews[`${r.id}_d1`];
+                const d7Done = !!state.reviews[`${r.id}_d7`];
+                const d30Done = r.d30 ? !!state.reviews[`${r.id}_d30`] : true;
+
+                let completedCount = (d1Done ? 1 : 0) + (d7Done ? 1 : 0) + (r.d30 ? (d30Done ? 1 : 0) : 0);
+                let totalPossible = r.d30 ? 3 : 2;
+                let pct = Math.round((completedCount / totalPossible) * 100);
+
+                const tr = document.createElement("tr");
+                tr.innerHTML = `
+                    <td>
+                        <span class="prio-pill prio-${r.prio}">
+                            ${r.prio === 'alta' ? 'Alta' : (r.prio === 'media' ? 'Média' : 'Baixa')}
+                        </span>
+                    </td>
+                    <td><strong>${r.disc}</strong></td>
+                    <td style="max-width: 320px; line-height: 1.35; color: var(--c-text);">${r.topico}</td>
+                    <td><span style="color: var(--c-text-muted); font-size: 0.84rem;">📅 ${r.estudo}</span></td>
+                    <td class="rev-check-cell">
+                        <button class="rev-check-btn ${d1Done ? 'checked' : ''}" onclick="toggleReview('${r.id}', 'd1')">
+                            ${d1Done ? '✅ Feito' : '⬜ ' + r.d1}
+                        </button>
+                    </td>
+                    <td class="rev-check-cell">
+                        <button class="rev-check-btn ${d7Done ? 'checked' : ''}" onclick="toggleReview('${r.id}', 'd7')">
+                            ${d7Done ? '✅ Feito' : '⬜ ' + r.d7}
+                        </button>
+                    </td>
+                    <td class="rev-check-cell">
+                        ${r.d30 ? `
+                        <button class="rev-check-btn ${d30Done ? 'checked' : ''}" onclick="toggleReview('${r.id}', 'd30')">
+                            ${d30Done ? '✅ Feito' : '⬜ ' + r.d30}
+                        </button>` : '<span style="color:var(--c-text-faint)">—</span>'}
+                    </td>
+                    <td>
+                        <div style="display:flex; align-items:center; gap:10px;">
+                            <div class="progress-bar-container" style="width: 70px; height: 6px; margin: 0;">
+                                <div class="progress-bar-fill" style="width: ${pct}%; background: ${pct === 100 ? 'var(--c-brand)' : 'var(--navy-brand)'}"></div>
+                            </div>
+                            <span style="font-size:0.78rem; font-weight:700; color: var(--c-text);">${pct}%</span>
+                        </div>
+                    </td>
+                `;
+                tbody.appendChild(tr);
+            });
+
+            if (renderedCount === 0) {
+                tbody.innerHTML = `
+                    <tr>
+                        <td colspan="8" style="text-align: center; padding: 30px; color: var(--c-text-muted);">
+                            Nenhuma revisão encontrada para os critérios selecionados.
+                        </td>
+                    </tr>
+                `;
+            }
+        }
+
+        /* ==========================================================================
+           EXPORTAÇÃO E IMPORTAÇÃO DE BACKUP
+           ========================================================================== */
+        function exportData() {
+            const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(state, null, 2));
+            const downloadAnchor = document.createElement('a');
+            downloadAnchor.setAttribute("href", dataStr);
+            downloadAnchor.setAttribute("download", `TCE_MA_Progresso_Estudos_${new Date().toISOString().slice(0,10)}.json`);
+            document.body.appendChild(downloadAnchor);
+            downloadAnchor.click();
+            downloadAnchor.remove();
+            showToast("📥 Arquivo JSON de backup exportado!");
+        }
+
+        function importData(e) {
+            const file = e.target.files[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = function(event) {
+                try {
+                    state = JSON.parse(event.target.result);
+                    saveState();
+                    renderSchedule();
+                    renderRevisoes();
+                    showToast("✅ Dados restaurados com sucesso!");
+                } catch(err) {
+                    alert("Erro ao importar arquivo JSON: " + err.message);
+                }
+            };
+            reader.readAsText(file);
+        }
+
+        /* ==========================================================================
+           MODAL DE RESET
+           ========================================================================== */
+        function openResetModal() {
+            document.getElementById("resetModal").classList.add("show");
+        }
+
+        function closeResetModal() {
+            document.getElementById("resetModal").classList.remove("show");
+        }
+
+        function confirmResetExecution() {
+            state = { days: {}, reviews: {}, notes: {}, questionsDone: {} };
+            saveState();
+            renderSchedule();
+            renderRevisoes();
+            closeResetModal();
+            showToast("🔄 Progresso resetado.");
+        }
+
+        /* ==========================================================================
+           INICIALIZAÇÃO DA APLICAÇÃO
+           ========================================================================== */
+        initTheme();
+        loadState();
+        updateMetrics();
+        renderSchedule();
+        renderRevisoes();
+        fetchCloudState();
+    </script>
+</body>
+</html>

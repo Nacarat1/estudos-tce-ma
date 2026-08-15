@@ -1,0 +1,12 @@
+{
+  "name": "dashboard-estudos-tce-ma",
+  "version": "1.0.0",
+  "description": "Painel Interativo de Estudos TCE-MA com Design System Nacarat e Sincronização na Nuvem Vercel",
+  "main": "index.html",
+  "scripts": {
+    "dev": "vite"
+  },
+  "keywords": ["tce-ma", "dashboard", "estudos", "concurso", "nacarat"],
+  "author": "Nacarat Soluções Digitais",
+  "license": "MIT"
+}
