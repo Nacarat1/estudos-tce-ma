@@ -13,11 +13,22 @@ export default async function handler(req, res) {
         return;
     }
 
-    // Suporta Upstash Redis (Marketplace) ou Vercel KV
-    const redisUrl = process.env.UPSTASH_REDIS_REST_URL || process.env.KV_REST_API_URL;
-    const redisToken = process.env.UPSTASH_REDIS_REST_TOKEN || process.env.KV_REST_API_TOKEN;
+    // Busca dinâmica de qualquer variável de ambiente do Upstash ou KV
+    let redisUrl = process.env.UPSTASH_REDIS_REST_URL || process.env.KV_REST_API_URL;
+    let redisToken = process.env.UPSTASH_REDIS_REST_TOKEN || process.env.KV_REST_API_TOKEN;
 
-    // Se estiver usando Vercel Blob
+    // Se não encontrou pelas padrões, varre o process.env procurando variáveis do Upstash
+    if (!redisUrl || !redisToken) {
+        for (const [key, value] of Object.entries(process.env)) {
+            if (!redisUrl && (key.endsWith('_REST_URL') || key.endsWith('REDIS_REST_URL') || key.endsWith('REST_API_URL'))) {
+                redisUrl = value;
+            }
+            if (!redisToken && (key.endsWith('_REST_TOKEN') || key.endsWith('REDIS_REST_TOKEN') || key.endsWith('REST_API_TOKEN'))) {
+                redisToken = value;
+            }
+        }
+    }
+
     const blobToken = process.env.BLOB_READ_WRITE_TOKEN;
 
     // Se nenhuma storage foi conectada ainda
@@ -25,13 +36,13 @@ export default async function handler(req, res) {
         return res.status(200).json({
             success: false,
             storage_configured: false,
-            message: 'Nenhum Storage conectado na Vercel. Escolha Upstash (Redis) ou Blob no painel.'
+            message: 'Nenhum Storage ativo nesta compilação. Faça um Redeploy na Vercel para carregar as variáveis.'
         });
     }
 
     try {
         // ==========================================
-        // 1. SUPORTE A UPSTASH / REDIS (RECOMENDADO)
+        // 1. SUPORTE A UPSTASH / REDIS
         // ==========================================
         if (redisUrl && redisToken) {
             if (req.method === 'GET') {
