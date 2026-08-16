@@ -619,6 +619,23 @@
             pointer-events: none;
         }
 
+        .filter-stats-text {
+            font-size: 0.82rem;
+            color: var(--c-text-muted);
+            font-weight: 500;
+            white-space: nowrap;
+        }
+
+        .block-topic-rev {
+            color: var(--brand-gold-text);
+            font-weight: 600;
+            background-color: var(--brand-gold-light);
+            padding: 2px 6px;
+            border-radius: 4px;
+            display: inline-block;
+            margin-bottom: 4px;
+        }
+
         /* ==========================================================================
            CRONOGRAMA DIÁRIO (SCHEDULE CARDS)
            ========================================================================== */
@@ -1142,8 +1159,256 @@
             color: var(--c-text);
             margin-bottom: 4px;
         }
+        /* ==========================================================================
+           RESPONSIVIDADE MOBILE — BREAKPOINTS
+           ========================================================================== */
+
+        /* Por padrão, versão curta das abas e textos dos botões ficam ocultos */
+        .tab-text-short { display: none; }
+        .tab-text-full  { display: inline; }
+
+        /* ── TABLET E CELULAR GRANDE (≤ 768px) ─────────────────────────────── */
+        @media (max-width: 768px) {
+
+            /* Container */
+            .container {
+                margin: 16px auto;
+                padding: 0 14px;
+            }
+
+            /* Header */
+            .header-content {
+                padding: 10px 14px;
+                gap: 10px;
+            }
+            .brand-text h1 {
+                font-size: 1.05rem;
+            }
+            .brand-text p {
+                font-size: 0.75rem;
+            }
+            .brand-badge-logo {
+                width: 38px;
+                height: 38px;
+                font-size: 1.1rem;
+            }
+            .header-actions {
+                gap: 6px;
+            }
+            /* Oculta texto dos botões de ação — mantém apenas emoji */
+            .header-actions .btn-text {
+                display: none;
+            }
+            .btn {
+                padding: 7px 10px;
+                font-size: 0.85rem;
+            }
+            .cloud-badge {
+                padding: 6px 10px;
+            }
+
+            /* Stats Grid: 2x2 */
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 12px;
+                margin-bottom: 16px;
+            }
+            .stat-card {
+                padding: 14px;
+            }
+            .stat-value {
+                font-size: 1.5rem;
+            }
+
+            /* Tabs — texto abreviado */
+            .tab-text-full  { display: none; }
+            .tab-text-short { display: inline; }
+            .tab-btn {
+                font-size: 0.82rem;
+                padding: 8px 10px;
+                gap: 4px;
+            }
+            .tabs-nav-container {
+                padding: 4px;
+                gap: 4px;
+                margin-bottom: 16px;
+            }
+
+            /* Filter Bar — empilha verticalmente */
+            .filter-bar {
+                padding: 12px 14px;
+                gap: 10px;
+                margin-bottom: 16px;
+            }
+            .filter-group {
+                flex-direction: column;
+                align-items: stretch;
+                width: 100%;
+                gap: 8px;
+            }
+            .filter-item {
+                width: 100%;
+            }
+            .filter-item select,
+            .filter-item .search-box,
+            .filter-item .search-box input {
+                width: 100%;
+                min-width: unset;
+            }
+
+            /* Day Cards — 1 coluna */
+            .day-body {
+                grid-template-columns: 1fr;
+                padding: 14px;
+                gap: 12px;
+            }
+            .day-header {
+                padding: 10px 14px;
+            }
+            .day-footer {
+                padding: 10px 14px;
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            .schedule-grid {
+                gap: 14px;
+            }
+
+            /* Tabela de Revisões e Edital */
+            th, td {
+                padding: 10px 12px;
+                font-size: 0.82rem;
+            }
+            th {
+                font-size: 0.75rem;
+            }
+
+            /* Banner de data de revisão */
+            #revDateBanner {
+                padding: 10px 14px;
+            }
+        }
+
+        /* ── CELULAR COMPACTO (≤ 480px) ────────────────────────────────────── */
+        @media (max-width: 480px) {
+
+            /* Container */
+            .container {
+                padding: 0 10px;
+                margin: 12px auto;
+            }
+
+            /* Header — logo menor, subtítulo oculto */
+            .brand-text p {
+                display: none;
+            }
+            .brand-text h1 {
+                font-size: 0.95rem;
+            }
+            .header-content {
+                padding: 8px 10px;
+            }
+
+            /* Stats Grid — 1 coluna única */
+            .stats-grid {
+                grid-template-columns: 1fr;
+                gap: 10px;
+            }
+            .stat-card {
+                padding: 12px 14px;
+                flex-direction: row;
+                align-items: center;
+                gap: 12px;
+                justify-content: flex-start;
+            }
+            .stat-card::before {
+                width: 3px;
+                height: 100%;
+                top: 0;
+                left: 0;
+            }
+            .stat-value {
+                font-size: 1.3rem;
+                margin-bottom: 0;
+            }
+            .stat-header {
+                margin-bottom: 2px;
+            }
+            .progress-bar-container {
+                margin-top: 6px;
+            }
+
+            /* Abas — apenas ícone + texto curto */
+            .tab-btn {
+                font-size: 0.75rem;
+                padding: 7px 8px;
+            }
+
+            /* Filter Bar */
+            .filter-bar {
+                padding: 10px 10px;
+            }
+
+            /* Day Cards */
+            .day-body {
+                padding: 10px;
+                gap: 10px;
+            }
+            .block-card {
+                padding: 12px;
+            }
+            .block-subj {
+                font-size: 0.95rem;
+            }
+            .block-content {
+                font-size: 0.82rem;
+            }
+            .day-header {
+                padding: 8px 10px;
+                gap: 8px;
+            }
+            .day-badge {
+                font-size: 0.8rem;
+                padding: 3px 8px;
+            }
+            .day-footer {
+                padding: 8px 10px;
+            }
+            .exercise-info {
+                font-size: 0.8rem;
+            }
+            .custom-checkbox-container {
+                font-size: 0.8rem;
+                padding: 5px 8px;
+            }
+
+            /* Tabelas */
+            th, td {
+                padding: 8px 10px;
+                font-size: 0.78rem;
+            }
+            .rev-check-btn {
+                padding: 4px 8px;
+                font-size: 0.72rem;
+            }
+
+            /* Toast — ocupa mais largura no celular */
+            .toast {
+                bottom: 12px;
+                right: 12px;
+                left: 12px;
+                font-size: 0.82rem;
+            }
+
+            /* Modal */
+            .modal-card {
+                padding: 18px;
+            }
+        }
+
     </style>
 </head>
+
 <body>
 
     <!-- CABEÇALHO DA MARCA & PRODUTO -->
@@ -1160,23 +1425,14 @@
                 </div>
             </div>
             <div class="header-actions">
-                <div class="cloud-badge connected" id="cloudBadge" onclick="syncNow()" title="Clique para sincronizar agora com a nuvem">
-                    <span id="cloudIcon">🟢</span> <span id="cloudStatusText">Nuvem Conectada</span>
-                </div>
                 <button class="btn btn-secondary" onclick="toggleTheme()" id="themeBtn" title="Alternar tema Claro/Escuro">
-                    <span id="themeIcon">🌙</span> <span id="themeText">Modo Escuro</span>
+                    <span id="themeIcon">🌙</span> <span id="themeText" class="btn-text">Modo Escuro</span>
                 </button>
-                <button class="btn btn-secondary" onclick="exportData()" title="Salvar backup em arquivo JSON">
-                    📥 Exportar
-                </button>
-                <label class="btn btn-secondary" style="cursor: pointer;" title="Restaurar progresso de um arquivo JSON">
-                    📤 Importar
-                    <input type="file" id="importInput" style="display:none" onchange="importData(event)">
-                </label>
                 <button class="btn btn-danger-ghost" onclick="openResetModal()" title="Reiniciar todas as marcações">
-                    🔄 Resetar
+                    🔄 <span class="btn-text">Resetar</span>
                 </button>
             </div>
+
         </div>
     </header>
 
@@ -1232,13 +1488,13 @@
         <!-- NAVEGAÇÃO DE ABAS -->
         <div class="tabs-nav-container">
             <button class="tab-btn active" onclick="switchTab('crono')">
-                📅 Cronograma Diário (90 Dias)
+                📅 <span class="tab-text-full">Cronograma Diário (90 Dias)</span><span class="tab-text-short">Cronograma</span>
             </button>
             <button class="tab-btn" onclick="switchTab('revisoes')">
-                🔄 Controle de Revisões (D+1, D+7, D+30)
+                🔄 <span class="tab-text-full">Controle de Revisões (D+1, D+7, D+30)</span><span class="tab-text-short">Revisões</span>
             </button>
             <button class="tab-btn" onclick="switchTab('edital')">
-                🎯 Matriz & Distribuição do Edital
+                🎯 <span class="tab-text-full">Matriz &amp; Distribuição do Edital</span><span class="tab-text-short">Edital</span>
             </button>
         </div>
 
@@ -1276,14 +1532,34 @@
                             <option value="completed">Apenas Concluídos</option>
                         </select>
                     </div>
-                </div>
 
-                <div class="filter-group">
-                    <div class="search-box">
-                        <span class="search-icon">🔍</span>
-                        <input type="text" id="scheduleSearch" placeholder="Buscar por assunto ou matéria..." oninput="renderSchedule()">
+                    <div class="filter-item">
+                        <span class="filter-label">Disciplina:</span>
+                        <select id="cronoDiscFilter" onchange="renderSchedule()">
+                            <option value="all">Todas as Disciplinas</option>
+                            <option value="Dir. Constitucional">Dir. Constitucional</option>
+                            <option value="Dir. Administrativo">Dir. Administrativo</option>
+                            <option value="Exec. Orçamentária">Exec. Orçamentária</option>
+                            <option value="Gestão de Contratos">Gestão de Contratos</option>
+                            <option value="Raciocínio Lógico">Raciocínio Lógico</option>
+                            <option value="Informática">Informática</option>
+                            <option value="Controle Externo">Controle Externo</option>
+                            <option value="Legislação Específica">Legislação Específica</option>
+                            <option value="História do MA">História do MA</option>
+                            <option value="Geografia do MA">Geografia do MA</option>
+                            <option value="Direitos Humanos">Direitos Humanos</option>
+                        </select>
+                    </div>
+
+                    <div class="filter-item">
+                        <div class="search-box">
+                            <span class="search-icon">🔍</span>
+                            <input type="text" id="scheduleSearch" placeholder="Buscar por assunto ou matéria..." oninput="renderSchedule()">
+                        </div>
                     </div>
                 </div>
+
+                <div class="filter-stats-text" id="cronoFilterStats">Exibindo 90 de 90 dias</div>
             </div>
 
             <div class="schedule-grid" id="scheduleList">
@@ -1295,6 +1571,18 @@
         <div id="tab-revisoes" class="tab-pane">
             <div class="filter-bar">
                 <div class="filter-group">
+                    <div class="filter-item">
+                        <span class="filter-label">Data / Dia:</span>
+                        <select id="filterRevDate" onchange="renderRevisoes()">
+                            <option value="all">Todas as Datas</option>
+                            <option value="today">📅 Hoje</option>
+                        </select>
+                    </div>
+
+                    <button class="btn btn-secondary" onclick="setRevDateToday()" style="padding: 6px 12px; font-size: 0.82rem; font-weight: 700; color: var(--navy-brand); background-color: var(--navy-brand-subtle); border-color: rgba(30, 59, 106, 0.2);" title="Filtrar matérias que precisam ser revisadas hoje">
+                        🎯 Revisões de Hoje
+                    </button>
+
                     <div class="filter-item">
                         <span class="filter-label">Prioridade:</span>
                         <select id="revPrioFilter" onchange="renderRevisoes()">
@@ -1322,14 +1610,30 @@
                             <option value="Direitos Humanos">Direitos Humanos</option>
                         </select>
                     </div>
-                </div>
 
-                <div class="filter-group">
-                    <div class="search-box">
-                        <span class="search-icon">🔍</span>
-                        <input type="text" id="revSearch" placeholder="Buscar tópico de revisão..." oninput="renderRevisoes()">
+                    <div class="filter-item">
+                        <div class="search-box">
+                            <span class="search-icon">🔍</span>
+                            <input type="text" id="revSearch" placeholder="Buscar tópico de revisão..." oninput="renderRevisoes()">
+                        </div>
                     </div>
                 </div>
+
+                <div class="filter-stats-text" id="revFilterStats">Exibindo 0 de 0 tópicos</div>
+            </div>
+
+            <!-- BANNER INFORMATIVO QUANDO FILTRO DE DATA ESTIVER ATIVO -->
+            <div id="revDateBanner" style="display: none; background: var(--navy-brand-subtle); border: 1px solid var(--navy-brand); border-radius: var(--r-card); padding: 12px 18px; margin-bottom: 16px; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap;">
+                <div style="display: flex; align-items: center; gap: 10px;">
+                    <span style="font-size: 1.3rem;">🎯</span>
+                    <div>
+                        <strong id="revDateBannerTitle" style="color: var(--navy-brand); font-size: 0.95rem;">Revisões Programadas para: </strong>
+                        <p id="revDateBannerDesc" style="font-size: 0.82rem; color: var(--c-text-muted); margin-top: 2px;">Exibindo apenas as matérias e tópicos com ciclos D+1, D+7 ou D+30 previstos para esta data.</p>
+                    </div>
+                </div>
+                <button class="btn btn-secondary" onclick="clearRevDateFilter()" style="font-size: 0.78rem; padding: 5px 12px;">
+                    ✕ Limpar Filtro de Data
+                </button>
             </div>
 
             <div class="table-card">
@@ -1916,14 +2220,93 @@
             renderRevisoes();
         }
 
+        /* Utilitários */
+        function escapeHtml(str) {
+            if (!str) return "";
+            return String(str)
+                .replace(/&/g, "&amp;")
+                .replace(/</g, "&lt;")
+                .replace(/>/g, "&gt;")
+                .replace(/"/g, "&quot;")
+                .replace(/'/g, "&#039;");
+        }
+
+        function formatTopicHtml(topicStr) {
+            if (!topicStr) return "";
+            return topicStr
+                .replace(/(🔄 Revisão D\+\d+[^:+]+:?)/g, '<span class="block-topic-rev">$1</span>')
+                .replace(/(📝 SIMULADO[^:+]+:?)/g, '<strong style="color: var(--navy-brand);">$1</strong>')
+                .replace(/(📝 \d+º? Simulado[^:+]+:?)/g, '<strong style="color: var(--navy-brand);">$1</strong>')
+                .replace(/(⚡ Revisão [Ii]ntensiva[^:+]+:?)/g, '<strong style="color: var(--brand-gold-hover);">$1</strong>')
+                .replace(/(🎯 Reforço[^:+]+:?)/g, '<strong style="color: #DC2626;">$1</strong>');
+        }
+
+        function getTodayFormatted() {
+            const today = new Date();
+            const day = String(today.getDate()).padStart(2, '0');
+            const month = String(today.getMonth() + 1).padStart(2, '0');
+            const year = today.getFullYear();
+            return `${day}/${month}/${year}`;
+        }
+
+        function parseDateBR(str) {
+            if (!str) return 0;
+            const parts = str.split('/');
+            if (parts.length !== 3) return 0;
+            return new Date(parseInt(parts[2], 10), parseInt(parts[1], 10) - 1, parseInt(parts[0], 10)).getTime();
+        }
+
+        function populateRevDates() {
+            const select = document.getElementById("filterRevDate");
+            if (!select) return;
+
+            const todayStr = getTodayFormatted();
+            const datesSet = new Set();
+            revData.forEach(r => {
+                if (r.d1) datesSet.add(r.d1);
+                if (r.d7) datesSet.add(r.d7);
+                if (r.d30) datesSet.add(r.d30);
+            });
+
+            const sortedDates = Array.from(datesSet).sort((a, b) => parseDateBR(a) - parseDateBR(b));
+
+            let html = `<option value="all">Todas as Datas</option>`;
+            html += `<option value="today">📅 Hoje (${todayStr})</option>`;
+            
+            sortedDates.forEach(d => {
+                const isToday = (d === todayStr);
+                html += `<option value="${d}">${d}${isToday ? ' (Hoje)' : ''}</option>`;
+            });
+
+            select.innerHTML = html;
+        }
+
+        function setRevDateToday() {
+            const select = document.getElementById("filterRevDate");
+            if (select) {
+                select.value = "today";
+                renderRevisoes();
+            }
+        }
+
+        function clearRevDateFilter() {
+            const select = document.getElementById("filterRevDate");
+            if (select) {
+                select.value = "all";
+                renderRevisoes();
+            }
+        }
+
         /* ==========================================================================
            RENDERIZAÇÃO DO CRONOGRAMA
            ========================================================================== */
         function renderSchedule() {
             const weekVal = document.getElementById("weekFilter").value;
             const statusVal = document.getElementById("statusFilter").value;
+            const discVal = document.getElementById("cronoDiscFilter") ? document.getElementById("cronoDiscFilter").value : "all";
             const searchVal = (document.getElementById("scheduleSearch") ? document.getElementById("scheduleSearch").value : "").toLowerCase().trim();
             const container = document.getElementById("scheduleList");
+            const statsEl = document.getElementById("cronoFilterStats");
             container.innerHTML = "";
 
             let renderedCount = 0;
@@ -1939,6 +2322,15 @@
                 if (statusVal === "completed" && !isDayDone) return;
                 if (statusVal === "pending" && isDayDone) return;
 
+                // Filtro por disciplina
+                if (discVal !== "all") {
+                    const hasDisc = (d.b1_mat && d.b1_mat.toLowerCase().includes(discVal.toLowerCase())) ||
+                                    (d.b2_mat && d.b2_mat.toLowerCase().includes(discVal.toLowerCase())) ||
+                                    (d.b1_top && d.b1_top.toLowerCase().includes(discVal.toLowerCase())) ||
+                                    (d.b2_top && d.b2_top.toLowerCase().includes(discVal.toLowerCase()));
+                    if (!hasDisc) return;
+                }
+
                 if (searchVal) {
                     const matchText = `${d.dia} ${d.data} ${d.fase} ${d.b1_mat} ${d.b1_top} ${d.b2_mat} ${d.b2_top} ${d.exercicios}`.toLowerCase();
                     if (!matchText.includes(searchVal)) return;
@@ -1946,7 +2338,7 @@
 
                 renderedCount++;
                 const noteVal = state.notes[`day_${idx}`] || "";
-                const qDoneVal = state.questionsDone[`day_${idx}`] || "";
+                const qDoneVal = state.questionsDone[`day_${idx}`] !== undefined ? state.questionsDone[`day_${idx}`] : (exDone ? 60 : "");
 
                 const card = document.createElement("div");
                 card.className = `day-card ${isDayDone ? 'completed' : ''}`;
@@ -1973,7 +2365,7 @@
                             </div>
                             <div>
                                 <div class="block-subj">${d.b1_mat}</div>
-                                <div class="block-content" style="margin-top: 6px;">${d.b1_top}</div>
+                                <div class="block-content" style="margin-top: 6px;">${formatTopicHtml(d.b1_top)}</div>
                             </div>
                             <label class="custom-checkbox-container" style="margin-top: 10px;">
                                 <input type="checkbox" ${b1Done ? 'checked' : ''} onchange="toggleDayBlock(${idx}, 'b1')">
@@ -1991,7 +2383,7 @@
                             </div>
                             <div>
                                 <div class="block-subj">${d.b2_mat}</div>
-                                <div class="block-content" style="margin-top: 6px;">${d.b2_top}</div>
+                                <div class="block-content" style="margin-top: 6px;">${formatTopicHtml(d.b2_top)}</div>
                             </div>
                             <label class="custom-checkbox-container" style="margin-top: 10px;">
                                 <input type="checkbox" ${b2Done ? 'checked' : ''} onchange="toggleDayBlock(${idx}, 'b2')">
@@ -2015,11 +2407,15 @@
                         </div>
                     </div>
                     <div class="note-container">
-                        <input type="text" class="note-input" placeholder="💬 Anotações / Dúvidas sobre o estudo deste dia..." value="${noteVal}" onchange="updateNote(${idx}, this.value)">
+                        <input type="text" class="note-input" placeholder="💬 Anotações / Dúvidas sobre o estudo deste dia..." value="${escapeHtml(noteVal)}" onchange="updateNote(${idx}, this.value)">
                     </div>
                 `;
                 container.appendChild(card);
             });
+
+            if (statsEl) {
+                statsEl.textContent = `Exibindo ${renderedCount} de ${daysData.length} dias`;
+            }
 
             if (renderedCount === 0) {
                 container.innerHTML = `
@@ -2035,20 +2431,39 @@
            RENDERIZAÇÃO DE REVISÕES ESPAÇADAS
            ========================================================================== */
         function renderRevisoes() {
+            const dateVal = document.getElementById("filterRevDate") ? document.getElementById("filterRevDate").value : "all";
             const prioVal = document.getElementById("revPrioFilter").value;
             const discVal = document.getElementById("revDiscFilter").value;
             const searchVal = (document.getElementById("revSearch") ? document.getElementById("revSearch").value : "").toLowerCase().trim();
             const tbody = document.getElementById("revisoesTableBody");
+            const statsEl = document.getElementById("revFilterStats");
+            const bannerEl = document.getElementById("revDateBanner");
+            const bannerTitleEl = document.getElementById("revDateBannerTitle");
+            const bannerDescEl = document.getElementById("revDateBannerDesc");
             tbody.innerHTML = "";
+
+            const todayStr = getTodayFormatted();
+            let activeDate = null;
+            if (dateVal === "today") {
+                activeDate = todayStr;
+            } else if (dateVal !== "all") {
+                activeDate = dateVal;
+            }
 
             let renderedCount = 0;
 
             revData.forEach(r => {
+                // Filtro por Data (se ativo)
+                if (activeDate) {
+                    const matchesDate = (r.d1 === activeDate || r.d7 === activeDate || r.d30 === activeDate);
+                    if (!matchesDate) return;
+                }
+
                 if (prioVal !== "all" && r.prio !== prioVal) return;
                 if (discVal !== "all" && r.disc !== discVal) return;
 
                 if (searchVal) {
-                    const matchText = `${r.disc} ${r.topico} ${r.estudo}`.toLowerCase();
+                    const matchText = `${r.id} ${r.disc} ${r.topico} ${r.estudo}`.toLowerCase();
                     if (!matchText.includes(searchVal)) return;
                 }
 
@@ -2061,7 +2476,21 @@
                 let totalPossible = r.d30 ? 3 : 2;
                 let pct = Math.round((completedCount / totalPossible) * 100);
 
+                const isD1Active = activeDate && r.d1 === activeDate;
+                const isD7Active = activeDate && r.d7 === activeDate;
+                const isD30Active = activeDate && r.d30 === activeDate;
+
+                let cycleDueBadge = "";
+                if (activeDate) {
+                    if (isD1Active) cycleDueBadge = `<span style="display: block; font-size: 0.72rem; font-weight: 700; color: #DC2626; margin-top: 4px;">⚡ Revisão D+1 hoje!</span>`;
+                    else if (isD7Active) cycleDueBadge = `<span style="display: block; font-size: 0.72rem; font-weight: 700; color: #D97706; margin-top: 4px;">⚡ Revisão D+7 hoje!</span>`;
+                    else if (isD30Active) cycleDueBadge = `<span style="display: block; font-size: 0.72rem; font-weight: 700; color: #059669; margin-top: 4px;">⚡ Revisão D+30 hoje!</span>`;
+                }
+
                 const tr = document.createElement("tr");
+                if (activeDate) {
+                    tr.style.backgroundColor = "var(--navy-brand-subtle)";
+                }
                 tr.innerHTML = `
                     <td>
                         <span class="prio-pill prio-${r.prio}">
@@ -2069,23 +2498,32 @@
                         </span>
                     </td>
                     <td><strong>${r.disc}</strong></td>
-                    <td style="max-width: 320px; line-height: 1.35; color: var(--c-text);">${r.topico}</td>
+                    <td style="max-width: 320px; line-height: 1.35; color: var(--c-text);">
+                        ${r.topico}
+                        ${cycleDueBadge}
+                    </td>
                     <td><span style="color: var(--c-text-muted); font-size: 0.84rem;">📅 ${r.estudo}</span></td>
                     <td class="rev-check-cell">
-                        <button class="rev-check-btn ${d1Done ? 'checked' : ''}" onclick="toggleReview('${r.id}', 'd1')">
-                            ${d1Done ? '✅ Feito' : '⬜ ' + r.d1}
+                        <button class="rev-check-btn ${d1Done ? 'checked' : ''}" 
+                            style="${isD1Active ? 'border: 2px solid var(--brand-gold); background-color: var(--brand-gold-light); color: var(--brand-gold-text); font-weight: 800; transform: scale(1.04);' : ''}" 
+                            onclick="toggleReview('${r.id}', 'd1')" title="Marcar revisão D+1 (24h)">
+                            ${d1Done ? '✅ Feito' : '⬜ ' + r.d1} ${isD1Active ? '⭐' : ''}
                         </button>
                     </td>
                     <td class="rev-check-cell">
-                        <button class="rev-check-btn ${d7Done ? 'checked' : ''}" onclick="toggleReview('${r.id}', 'd7')">
-                            ${d7Done ? '✅ Feito' : '⬜ ' + r.d7}
+                        <button class="rev-check-btn ${d7Done ? 'checked' : ''}" 
+                            style="${isD7Active ? 'border: 2px solid var(--brand-gold); background-color: var(--brand-gold-light); color: var(--brand-gold-text); font-weight: 800; transform: scale(1.04);' : ''}" 
+                            onclick="toggleReview('${r.id}', 'd7')" title="Marcar revisão D+7 (1 semana)">
+                            ${d7Done ? '✅ Feito' : '⬜ ' + r.d7} ${isD7Active ? '⭐' : ''}
                         </button>
                     </td>
                     <td class="rev-check-cell">
                         ${r.d30 ? `
-                        <button class="rev-check-btn ${d30Done ? 'checked' : ''}" onclick="toggleReview('${r.id}', 'd30')">
-                            ${d30Done ? '✅ Feito' : '⬜ ' + r.d30}
-                        </button>` : '<span style="color:var(--c-text-faint)">—</span>'}
+                        <button class="rev-check-btn ${d30Done ? 'checked' : ''}" 
+                            style="${isD30Active ? 'border: 2px solid var(--brand-gold); background-color: var(--brand-gold-light); color: var(--brand-gold-text); font-weight: 800; transform: scale(1.04);' : ''}" 
+                            onclick="toggleReview('${r.id}', 'd30')" title="Marcar revisão D+30 (1 mês)">
+                            ${d30Done ? '✅ Feito' : '⬜ ' + r.d30} ${isD30Active ? '⭐' : ''}
+                        </button>` : '<span style="color:var(--c-text-faint); font-size: 0.78rem; font-style: italic;">Reta Final</span>'}
                     </td>
                     <td>
                         <div style="display:flex; align-items:center; gap:10px;">
@@ -2098,6 +2536,20 @@
                 `;
                 tbody.appendChild(tr);
             });
+
+            if (statsEl) {
+                statsEl.textContent = `Exibindo ${renderedCount} de ${revData.length} tópicos`;
+            }
+
+            if (bannerEl) {
+                if (activeDate) {
+                    bannerEl.style.display = "flex";
+                    if (bannerTitleEl) bannerTitleEl.textContent = `Revisões Programadas para: ${activeDate} (${renderedCount} tópicos)`;
+                    if (bannerDescEl) bannerDescEl.textContent = `Exibindo apenas as matérias e tópicos com ciclos de revisão (D+1, D+7 ou D+30) com vencimento em ${activeDate}.`;
+                } else {
+                    bannerEl.style.display = "none";
+                }
+            }
 
             if (renderedCount === 0) {
                 tbody.innerHTML = `
@@ -2168,6 +2620,7 @@
         initTheme();
         loadState();
         updateMetrics();
+        populateRevDates();
         renderSchedule();
         renderRevisoes();
 
