@@ -1487,13 +1487,13 @@
 
         <!-- NAVEGAÇÃO DE ABAS -->
         <div class="tabs-nav-container">
-            <button class="tab-btn active" onclick="switchTab('crono')">
+            <button class="tab-btn active" onclick="switchTab('crono', this)">
                 📅 <span class="tab-text-full">Cronograma Diário (90 Dias)</span><span class="tab-text-short">Cronograma</span>
             </button>
-            <button class="tab-btn" onclick="switchTab('revisoes')">
+            <button class="tab-btn" onclick="switchTab('revisoes', this)">
                 🔄 <span class="tab-text-full">Controle de Revisões (D+1, D+7, D+30)</span><span class="tab-text-short">Revisões</span>
             </button>
-            <button class="tab-btn" onclick="switchTab('edital')">
+            <button class="tab-btn" onclick="switchTab('edital', this)">
                 🎯 <span class="tab-text-full">Matriz &amp; Distribuição do Edital</span><span class="tab-text-short">Edital</span>
             </button>
         </div>
@@ -1971,6 +1971,15 @@
             questionsDone: {}
         };
 
+        function ensureStateIntegrity(s) {
+            if (!s || typeof s !== 'object') s = {};
+            if (!s.days || typeof s.days !== 'object') s.days = {};
+            if (!s.reviews || typeof s.reviews !== 'object') s.reviews = {};
+            if (!s.notes || typeof s.notes !== 'object') s.notes = {};
+            if (!s.questionsDone || typeof s.questionsDone !== 'object') s.questionsDone = {};
+            return s;
+        }
+
         let cloudSyncTimeout = null;
 
         /* ==========================================================================
@@ -1987,11 +1996,11 @@
             const themeIcon = document.getElementById("themeIcon");
             const themeText = document.getElementById("themeText");
             if (theme === "dark") {
-                themeIcon.innerText = "☀️";
-                themeText.innerText = "Modo Claro";
+                if (themeIcon) themeIcon.innerText = "☀️";
+                if (themeText) themeText.innerText = "Modo Claro";
             } else {
-                themeIcon.innerText = "🌙";
-                themeText.innerText = "Modo Escuro";
+                if (themeIcon) themeIcon.innerText = "🌙";
+                if (themeText) themeText.innerText = "Modo Escuro";
             }
         }
 
@@ -2008,23 +2017,24 @@
             const icon = document.getElementById("cloudIcon");
             const label = document.getElementById("cloudStatusText");
 
+            if (!badge) return;
+
             badge.className = "cloud-badge";
             if (status === "connected") {
                 badge.classList.add("connected");
-                icon.innerText = "🟢";
-                label.innerText = text || "Nuvem Conectada";
+                if (icon) icon.innerText = "🟢";
+                if (label) label.innerText = text || "Nuvem Conectada";
             } else if (status === "syncing") {
                 badge.classList.add("syncing");
-                icon.innerText = "🔄";
-                label.innerText = text || "Sincronizando...";
+                if (icon) icon.innerText = "🔄";
+                if (label) label.innerText = text || "Sincronizando...";
             } else {
-                icon.innerText = "📁";
-                label.innerText = text || "Modo Local";
+                if (icon) icon.innerText = "📁";
+                if (label) label.innerText = text || "Modo Local";
             }
         }
 
         async function fetchCloudState() {
-            // Se estiver rodando como arquivo local no PC (file://)
             if (window.location.protocol === 'file:') {
                 updateCloudBadge("offline", "Arquivo Local");
                 return;
@@ -2040,8 +2050,8 @@
                 if (!res.ok) throw new Error("Erro de resposta");
                 const result = await res.json();
 
-                if (result.success && result.data) {
-                    state = result.data;
+                if (result.success && result.data && typeof result.data === 'object' && Object.keys(result.data).length > 0) {
+                    state = ensureStateIntegrity(result.data);
                     localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
                     updateMetrics();
                     renderSchedule();
@@ -2070,13 +2080,13 @@
                     const res = await fetch("/api/progresso", {
                         method: "POST",
                         headers: { "Content-Type": "application/json" },
-                        body: JSON.stringify({ data: state }),
+                        body: JSON.stringify({ data: ensureStateIntegrity(state) }),
                         signal: controller.signal
                     });
                     clearTimeout(timeoutId);
 
                     const result = await res.json();
-                    if (result.success) {
+                    if (result && result.success) {
                         updateCloudBadge("connected", "Nuvem Sincronizada");
                     } else {
                         updateCloudBadge("connected", "Nuvem Conectada");
@@ -2101,14 +2111,18 @@
             const saved = localStorage.getItem(STORAGE_KEY);
             if (saved) {
                 try {
-                    state = JSON.parse(saved);
+                    state = ensureStateIntegrity(JSON.parse(saved));
                 } catch(e) {
                     console.error("Erro ao carregar dados salvos:", e);
+                    state = ensureStateIntegrity({});
                 }
+            } else {
+                state = ensureStateIntegrity(state);
             }
         }
 
         function saveState() {
+            ensureStateIntegrity(state);
             localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
             updateMetrics();
             scheduleCloudSave();
@@ -2117,6 +2131,7 @@
 
         function showToast(msg) {
             const toast = document.getElementById("toast");
+            if (!toast) return;
             toast.innerText = msg;
             toast.classList.add("show");
             setTimeout(() => toast.classList.remove("show"), 2600);
@@ -2125,24 +2140,33 @@
         /* ==========================================================================
            NAVEGAÇÃO POR ABAS
            ========================================================================== */
-        function switchTab(tabId) {
+        function switchTab(tabId, el) {
             document.querySelectorAll(".tab-pane").forEach(p => p.classList.remove("active"));
             document.querySelectorAll(".tab-btn").forEach(b => b.classList.remove("active"));
             
-            document.getElementById("tab-" + tabId).classList.add("active");
-            event.currentTarget.classList.add("active");
+            const targetPane = document.getElementById("tab-" + tabId);
+            if (targetPane) targetPane.classList.add("active");
+            
+            if (el) {
+                el.classList.add("active");
+            } else if (window.event && window.event.currentTarget) {
+                window.event.currentTarget.classList.add("active");
+            }
         }
 
         /* ==========================================================================
            MÉTRICAS & INDICADORES (KPIS)
            ========================================================================== */
         function updateMetrics() {
+            ensureStateIntegrity(state);
+
             // Contagem regressiva
             const examDate = new Date("2026-11-29T08:00:00");
             const now = new Date();
             const diffTime = examDate - now;
             const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-            document.getElementById("countdownVal").innerText = (diffDays > 0 ? diffDays : 0) + " dias";
+            const countdownEl = document.getElementById("countdownVal");
+            if (countdownEl) countdownEl.innerText = (diffDays > 0 ? diffDays : 0) + " dias";
 
             // Dias concluídos (B1 e B2)
             let completedDays = 0;
@@ -2152,9 +2176,12 @@
                 const b2 = state.days[`day_${idx}_b2`];
                 if (b1 && b2) completedDays++;
             });
-            document.getElementById("daysDoneVal").innerHTML = `${completedDays} <span class="stat-value-sub">/ ${totalDays} dias</span>`;
-            const pctDays = Math.round((completedDays / totalDays) * 100);
-            document.getElementById("daysProgressFill").style.width = pctDays + "%";
+            const daysDoneEl = document.getElementById("daysDoneVal");
+            if (daysDoneEl) daysDoneEl.innerHTML = `${completedDays} <span class="stat-value-sub">/ ${totalDays} dias</span>`;
+            
+            const pctDays = totalDays > 0 ? Math.round((completedDays / totalDays) * 100) : 0;
+            const daysFillEl = document.getElementById("daysProgressFill");
+            if (daysFillEl) daysFillEl.style.width = pctDays + "%";
 
             // Revisões concluídas
             let totalRevs = 0;
@@ -2172,21 +2199,26 @@
                 }
             });
             const pctRevs = totalRevs > 0 ? Math.round((doneRevs / totalRevs) * 100) : 0;
-            document.getElementById("revsDoneVal").innerText = pctRevs + "%";
-            document.getElementById("revsProgressFill").style.width = pctRevs + "%";
+            const revsDoneEl = document.getElementById("revsDoneVal");
+            if (revsDoneEl) revsDoneEl.innerText = pctRevs + "%";
+            
+            const revsFillEl = document.getElementById("revsProgressFill");
+            if (revsFillEl) revsFillEl.style.width = pctRevs + "%";
 
             // Total de questões resolvidas
             let totalQuestions = 0;
             Object.values(state.questionsDone).forEach(q => {
                 totalQuestions += parseInt(q || 0, 10);
             });
-            document.getElementById("questionsDoneVal").innerHTML = `${totalQuestions.toLocaleString('pt-BR')} <span class="stat-value-sub">/ ~5.400</span>`;
+            const questionsDoneEl = document.getElementById("questionsDoneVal");
+            if (questionsDoneEl) questionsDoneEl.innerHTML = `${totalQuestions.toLocaleString('pt-BR')} <span class="stat-value-sub">/ ~5.400</span>`;
         }
 
         /* ==========================================================================
            AÇÕES DO CRONOGRAMA DIÁRIO
            ========================================================================== */
         function toggleDayBlock(dayIdx, blockKey) {
+            ensureStateIntegrity(state);
             const key = `day_${dayIdx}_${blockKey}`;
             state.days[key] = !state.days[key];
             saveState();
@@ -2194,6 +2226,7 @@
         }
 
         function toggleExercise(dayIdx) {
+            ensureStateIntegrity(state);
             const key = `day_${dayIdx}_ex`;
             state.days[key] = !state.days[key];
             if (state.days[key] && !state.questionsDone[`day_${dayIdx}`]) {
@@ -2204,16 +2237,19 @@
         }
 
         function updateQuestionsCount(dayIdx, val) {
+            ensureStateIntegrity(state);
             state.questionsDone[`day_${dayIdx}`] = parseInt(val || 0, 10);
             saveState();
         }
 
         function updateNote(dayIdx, val) {
+            ensureStateIntegrity(state);
             state.notes[`day_${dayIdx}`] = val;
             saveState();
         }
 
         function toggleReview(revId, cycleKey) {
+            ensureStateIntegrity(state);
             const key = `${revId}_${cycleKey}`;
             state.reviews[key] = !state.reviews[key];
             saveState();
@@ -2301,12 +2337,22 @@
            RENDERIZAÇÃO DO CRONOGRAMA
            ========================================================================== */
         function renderSchedule() {
-            const weekVal = document.getElementById("weekFilter").value;
-            const statusVal = document.getElementById("statusFilter").value;
-            const discVal = document.getElementById("cronoDiscFilter") ? document.getElementById("cronoDiscFilter").value : "all";
-            const searchVal = (document.getElementById("scheduleSearch") ? document.getElementById("scheduleSearch").value : "").toLowerCase().trim();
+            ensureStateIntegrity(state);
+
+            const weekEl = document.getElementById("weekFilter");
+            const statusEl = document.getElementById("statusFilter");
+            const discEl = document.getElementById("cronoDiscFilter");
+            const searchEl = document.getElementById("scheduleSearch");
             const container = document.getElementById("scheduleList");
             const statsEl = document.getElementById("cronoFilterStats");
+
+            if (!container) return;
+
+            const weekVal = weekEl ? weekEl.value : "all";
+            const statusVal = statusEl ? statusEl.value : "all";
+            const discVal = discEl ? discEl.value : "all";
+            const searchVal = (searchEl ? searchEl.value : "").toLowerCase().trim();
+
             container.innerHTML = "";
 
             let renderedCount = 0;
@@ -2314,9 +2360,9 @@
             daysData.forEach((d, idx) => {
                 if (weekVal !== "all" && parseInt(weekVal, 10) !== d.semana) return;
 
-                const b1Done = !!state.days[`day_${idx}_b1`];
-                const b2Done = !!state.days[`day_${idx}_b2`];
-                const exDone = !!state.days[`day_${idx}_ex`];
+                const b1Done = !!(state.days && state.days[`day_${idx}_b1`]);
+                const b2Done = !!(state.days && state.days[`day_${idx}_b2`]);
+                const exDone = !!(state.days && state.days[`day_${idx}_ex`]);
                 const isDayDone = b1Done && b2Done;
 
                 if (statusVal === "completed" && !isDayDone) return;
@@ -2337,8 +2383,8 @@
                 }
 
                 renderedCount++;
-                const noteVal = state.notes[`day_${idx}`] || "";
-                const qDoneVal = state.questionsDone[`day_${idx}`] !== undefined ? state.questionsDone[`day_${idx}`] : (exDone ? 60 : "");
+                const noteVal = (state.notes && state.notes[`day_${idx}`]) || "";
+                const qDoneVal = (state.questionsDone && state.questionsDone[`day_${idx}`] !== undefined) ? state.questionsDone[`day_${idx}`] : (exDone ? 60 : "");
 
                 const card = document.createElement("div");
                 card.className = `day-card ${isDayDone ? 'completed' : ''}`;
@@ -2431,15 +2477,25 @@
            RENDERIZAÇÃO DE REVISÕES ESPAÇADAS
            ========================================================================== */
         function renderRevisoes() {
-            const dateVal = document.getElementById("filterRevDate") ? document.getElementById("filterRevDate").value : "all";
-            const prioVal = document.getElementById("revPrioFilter").value;
-            const discVal = document.getElementById("revDiscFilter").value;
-            const searchVal = (document.getElementById("revSearch") ? document.getElementById("revSearch").value : "").toLowerCase().trim();
+            ensureStateIntegrity(state);
+
+            const dateEl = document.getElementById("filterRevDate");
+            const prioEl = document.getElementById("revPrioFilter");
+            const discEl = document.getElementById("revDiscFilter");
+            const searchEl = document.getElementById("revSearch");
             const tbody = document.getElementById("revisoesTableBody");
             const statsEl = document.getElementById("revFilterStats");
             const bannerEl = document.getElementById("revDateBanner");
             const bannerTitleEl = document.getElementById("revDateBannerTitle");
             const bannerDescEl = document.getElementById("revDateBannerDesc");
+
+            if (!tbody) return;
+
+            const dateVal = dateEl ? dateEl.value : "all";
+            const prioVal = prioEl ? prioEl.value : "all";
+            const discVal = discEl ? discEl.value : "all";
+            const searchVal = (searchEl ? searchEl.value : "").toLowerCase().trim();
+
             tbody.innerHTML = "";
 
             const todayStr = getTodayFormatted();
@@ -2468,9 +2524,9 @@
                 }
 
                 renderedCount++;
-                const d1Done = !!state.reviews[`${r.id}_d1`];
-                const d7Done = !!state.reviews[`${r.id}_d7`];
-                const d30Done = r.d30 ? !!state.reviews[`${r.id}_d30`] : true;
+                const d1Done = !!(state.reviews && state.reviews[`${r.id}_d1`]);
+                const d7Done = !!(state.reviews && state.reviews[`${r.id}_d7`]);
+                const d30Done = r.d30 ? !!(state.reviews && state.reviews[`${r.id}_d30`]) : true;
 
                 let completedCount = (d1Done ? 1 : 0) + (d7Done ? 1 : 0) + (r.d30 ? (d30Done ? 1 : 0) : 0);
                 let totalPossible = r.d30 ? 3 : 2;
@@ -2582,7 +2638,7 @@
             const reader = new FileReader();
             reader.onload = function(event) {
                 try {
-                    state = JSON.parse(event.target.result);
+                    state = ensureStateIntegrity(JSON.parse(event.target.result));
                     saveState();
                     renderSchedule();
                     renderRevisoes();
@@ -2598,11 +2654,13 @@
            MODAL DE RESET
            ========================================================================== */
         function openResetModal() {
-            document.getElementById("resetModal").classList.add("show");
+            const modal = document.getElementById("resetModal");
+            if (modal) modal.classList.add("show");
         }
 
         function closeResetModal() {
-            document.getElementById("resetModal").classList.remove("show");
+            const modal = document.getElementById("resetModal");
+            if (modal) modal.classList.remove("show");
         }
 
         function confirmResetExecution() {
